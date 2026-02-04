@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard · Vault</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="noise"></div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="wordmark">vault</a>
+                <button class="sidebar-toggle" aria-label="Toggle sidebar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <label class="sidebar-label">Organization</label>
+                <div class="org-selector">
+                    <div class="org-icon">A</div>
+                    <span>Acme Corp</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="secrets">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Secrets
+                </a>
+                <a href="#" class="nav-item" data-page="projects">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Projects
+                </a>
+                <a href="#" class="nav-item" data-page="integrations">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    Integrations
+                </a>
+                <a href="#" class="nav-item" data-page="audit">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Audit Log
+                </a>
+                <a href="#" class="nav-item" data-page="team">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    Team
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item" data-page="settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                    </svg>
+                    Settings
+                </a>
+                <div class="user-menu">
+                    <div class="user-avatar" id="userAvatar">JD</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userName">John Doe</span>
+                        <span class="user-email" id="userEmail">john@acme.com</span>
+                    </div>
+                    <button class="user-menu-btn" id="userMenuBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="19" cy="12" r="1"></circle>
+                            <circle cx="5" cy="12" r="1"></circle>
+                        </svg>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#" class="dropdown-item" data-page="profile">Profile</a>
+                        <a href="#" class="dropdown-item" id="logoutBtn">Log out</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="breadcrumb">
+                    <span>Acme Corp</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <span class="current" id="currentPage">Secrets</span>
+                </div>
+                <div class="top-actions">
+                    <div class="search-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" placeholder="Search secrets..." id="searchInput">
+                        <kbd>⌘K</kbd>
+                    </div>
+                    <button class="btn-icon" title="Notifications">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span class="notification-badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Secrets Page -->
+            <div class="page active" id="page-secrets">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Secrets</h1>
+                        <p>Manage your environment variables and API keys</p>
+                    </div>
+                    <button class="btn-primary" id="addSecretBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Secret
+                    </button>
+                </div>
+
+                <!-- Environment Tabs -->
+                <div class="env-tabs">
+                    <button class="env-tab active" data-env="production">
+                        <span class="env-dot production"></span>
+                        Production
+                        <span class="env-count" id="prod-count">0</span>
+                    </button>
+                    <button class="env-tab" data-env="staging">
+                        <span class="env-dot staging"></span>
+                        Staging
+                        <span class="env-count" id="staging-count">0</span>
+                    </button>
+                    <button class="env-tab" data-env="development">
+                        <span class="env-dot development"></span>
+                        Development
+                        <span class="env-count" id="dev-count">0</span>
+                    </button>
+                </div>
+
+                <!-- Secrets Table -->
+                <div class="secrets-container">
+                    <div class="table-header">
+                        <div class="th-key">Key</div>
+                        <div class="th-value">Value</div>
+                        <div class="th-updated">Updated</div>
+                        <div class="th-actions">Actions</div>
+                    </div>
+                    <div class="secrets-list" id="secretsList">
+                        <!-- Secrets will be loaded here -->
+                        <div class="empty-state" id="emptyState">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            <h3>No secrets yet</h3>
+                            <p>Add your first secret to get started</p>
+                            <button class="btn-secondary" id="addFirstSecret">Add Secret</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Page -->
+            <div class="page" id="page-projects">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Projects</h1>
+                        <p>Organize your secrets by project</p>
+                    </div>
+                    <button class="btn-primary" id="addProjectBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Project
+                    </button>
+                </div>
+
+                <div class="projects-grid" id="projectsGrid">
+                    <!-- Projects will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Audit Log Page -->
+            <div class="page" id="page-audit">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Audit Log</h1>
+                        <p>Track all activity in your organization</p>
+                    </div>
+                    <div class="filter-group">
+                        <select id="auditFilter">
+                            <option value="all">All events</option>
+                            <option value="secrets">Secret changes</option>
+                            <option value="auth">Authentication</option>
+                            <option value="team">Team changes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="audit-list" id="auditList">
+                    <!-- Audit logs will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Team Page -->
+            <div class="page" id="page-team">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Team</h1>
+                        <p>Manage team members and permissions</p>
+                    </div>
+                    <button class="btn-primary" id="inviteBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <line x1="20" y1="8" x2="20" y2="14"></line>
+                            <line x1="23" y1="11" x2="17" y2="11"></line>
+                        </svg>
+                        Invite Member
+                    </button>
+                </div>
+
+                <div class="team-list" id="teamList">
+                    <!-- Team members will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div class="page" id="page-settings">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h1>Settings</h1>
+                        <p>Manage your account and organization settings</p>
+                    </div>
+                </div>
+
+                <div class="settings-content">
+                    <div class="settings-section">
+                        <h2>Profile</h2>
+                        <form id="profileForm">
+                            <div class="field">
+                                <label for="settingsName">Full Name</label>
+                                <input type="text" id="settingsName" value="">
+                            </div>
+                            <div class="field">
+                                <label for="settingsEmail">Email</label>
+                                <input type="email" id="settingsEmail" value="">
+                            </div>
+                            <button type="submit" class="btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2>Change Password</h2>
+                        <form id="passwordForm">
+                            <div class="field">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword">
+                            </div>
+                            <div class="field">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword">
+                            </div>
+                            <div class="field">
+                                <label for="confirmPassword">Confirm New Password</label>
+                                <input type="password" id="confirmPassword">
+                            </div>
+                            <button type="submit" class="btn-primary">Update Password</button>
+                        </form>
+                    </div>
+
+                    <div class="settings-section danger">
+                        <h2>Danger Zone</h2>
+                        <p>Permanently delete your account and all associated data.</p>
+                        <button class="btn-danger" id="deleteAccountBtn">Delete Account</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Secret Modal -->
+    <div class="modal" id="secretModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Secret</h2>
+                <button class="modal-close" id="closeModal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="secretForm">
+                <input type="hidden" id="secretId">
+                <div class="field">
+                    <label for="secretKey">Key</label>
+                    <input type="text" id="secretKey" placeholder="DATABASE_URL" required>
+                    <span class="field-hint">Use SCREAMING_SNAKE_CASE for consistency</span>
+                </div>
+                <div class="field">
+                    <label for="secretValue">Value</label>
+                    <textarea id="secretValue" placeholder="Enter secret value..." rows="3" required></textarea>
+                </div>
+                <div class="field">
+                    <label for="secretEnv">Environment</label>
+                    <select id="secretEnv">
+                        <option value="production">Production</option>
+                        <option value="staging">Staging</option>
+                        <option value="development">Development</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelModal">Cancel</button>
+                    <button type="submit" class="btn-primary" id="saveSecret">Save Secret</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-message"></span>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

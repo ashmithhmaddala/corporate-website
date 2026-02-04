@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vault.dev/sitemap.xml
+
+# Disallow admin/internal paths
+Disallow: /employee-login.html

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog · Vault</title>
+    <meta name="description" content="Insights on secrets management, security best practices, and engineering culture.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="wordmark">vault</a>
+            <div class="nav-center" id="nav-menu">
+                <a href="features.html">Features</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="integrations.html">Integrations</a>
+                <a href="docs.html">Docs</a>
+            </div>
+            <div class="nav-end">
+                <button class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <a href="login.html" class="nav-signin">Sign in</a>
+                <a href="login.html" class="btn-nav">Get started</a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <span class="label">Blog</span>
+            <h1>Insights & Updates</h1>
+            <p class="page-hero-sub">Thoughts on secrets management, security engineering, and building developer tools.</p>
+        </section>
+
+        <section class="blog-grid">
+            <article class="blog-card">
+                <div class="blog-thumb"></div>
+                <div class="blog-content">
+                    <span class="blog-meta">January 28, 2026 · Security</span>
+                    <h3><a href="#">Why Your .env Files Are a Ticking Time Bomb</a></h3>
+                    <p>Most teams know they shouldn't commit secrets to git. But .env files create a false sense of security. Here's what can go wrong and how to fix it.</p>
+                </div>
+            </article>
+            
+            <article class="blog-card">
+                <div class="blog-thumb"></div>
+                <div class="blog-content">
+                    <span class="blog-meta">January 20, 2026 · Engineering</span>
+                    <h3><a href="#">How We Built Our Kubernetes Secrets Operator</a></h3>
+                    <p>A deep dive into the architecture behind our new K8s integration. Custom resources, controllers, and the challenges of syncing secrets at scale.</p>
+                </div>
+            </article>
+            
+            <article class="blog-card">
+                <div class="blog-thumb"></div>
+                <div class="blog-content">
+                    <span class="blog-meta">January 12, 2026 · Best Practices</span>
+                    <h3><a href="#">The Complete Guide to Secret Rotation</a></h3>
+                    <p>Rotating secrets shouldn't require downtime. We break down strategies for zero-downtime rotation across databases, APIs, and third-party services.</p>
+                </div>
+            </article>
+            
+            <article class="blog-card">
+                <div class="blog-thumb"></div>
+                <div class="blog-content">
+                    <span class="blog-meta">January 5, 2026 · Company</span>
+                    <h3><a href="#">2025 Year in Review</a></h3>
+                    <p>A look back at what we shipped, what we learned, and where we're headed in 2026. Plus some numbers we've never shared publicly before.</p>
+                </div>
+            </article>
+            
+            <article class="blog-card">
+                <div class="blog-thumb"></div>
+                <div class="blog-content">
+                    <span class="blog-meta">December 18, 2025 · Security</span>
+                    <h3><a href="#">Anatomy of a Secrets Leak: Lessons from the Uber Breach</a></h3>
+                    <p>Breaking down how hardcoded credentials in a PowerShell script led to one of 2022's biggest breaches—and how basic secrets hygiene could have prevented it.</p>
+                </div>
+            </article>
+            
+            <article class="blog-card">
+                <div class="blog-thumb"></div>
+                <div class="blog-content">
+                    <span class="blog-meta">December 10, 2025 · Engineering</span>
+                    <h3><a href="#">Building a CLI That Developers Actually Want to Use</a></h3>
+                    <p>The design decisions behind Vault CLI: progressive disclosure, sensible defaults, and why we spent two weeks on error messages.</p>
+                </div>
+            </article>
+            
+            <article class="blog-card">
+                <div class="blog-thumb"></div>
+                <div class="blog-content">
+                    <span class="blog-meta">November 28, 2025 · Best Practices</span>
+                    <h3><a href="#">Onboarding Developers Without Compromising Security</a></h3>
+                    <p>Getting new team members productive shouldn't mean giving them the keys to the kingdom. Here's how to balance access and security.</p>
+                </div>
+            </article>
+            
+            <article class="blog-card">
+                <div class="blog-thumb"></div>
+                <div class="blog-content">
+                    <span class="blog-meta">November 15, 2025 · Company</span>
+                    <h3><a href="#">Why We Open Sourced Our CLI</a></h3>
+                    <p>The business case for open source in developer tools. How giving away our CLI made Vault a better product.</p>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="index.html" class="wordmark">vault</a>
+                <p>Secrets infrastructure for<br>modern engineering teams.</p>
+            </div>
+            <nav class="footer-nav">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="integrations.html">Integrations</a>
+                    <a href="changelog.html">Changelog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="docs.html">Documentation</a>
+                    <a href="api.html">API Reference</a>
+                    <a href="status.html">Status</a>
+                    <a href="security.html">Security</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="careers.html">Careers</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Vault Technologies, Inc.</span>
+            <div class="legal">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

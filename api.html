@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference · Vault</title>
+    <meta name="description" content="Complete API reference for the Vault REST API. Authentication, endpoints, and examples.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="wordmark">vault</a>
+            <div class="nav-center" id="nav-menu">
+                <a href="features.html">Features</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="integrations.html">Integrations</a>
+                <a href="docs.html">Docs</a>
+            </div>
+            <div class="nav-end">
+                <button class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <a href="login.html" class="nav-signin">Sign in</a>
+                <a href="login.html" class="btn-nav">Get started</a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="docs-nav-section">
+                <h4>Overview</h4>
+                <a href="#" class="active">Introduction</a>
+                <a href="#">Authentication</a>
+                <a href="#">Rate Limits</a>
+                <a href="#">Errors</a>
+            </div>
+            <div class="docs-nav-section">
+                <h4>Projects</h4>
+                <a href="#">List Projects</a>
+                <a href="#">Get Project</a>
+                <a href="#">Create Project</a>
+                <a href="#">Delete Project</a>
+            </div>
+            <div class="docs-nav-section">
+                <h4>Secrets</h4>
+                <a href="#">List Secrets</a>
+                <a href="#">Get Secret</a>
+                <a href="#">Create Secret</a>
+                <a href="#">Update Secret</a>
+                <a href="#">Delete Secret</a>
+            </div>
+            <div class="docs-nav-section">
+                <h4>Environments</h4>
+                <a href="#">List Environments</a>
+                <a href="#">Create Environment</a>
+                <a href="#">Clone Environment</a>
+            </div>
+            <div class="docs-nav-section">
+                <h4>Team</h4>
+                <a href="#">List Members</a>
+                <a href="#">Invite Member</a>
+                <a href="#">Update Role</a>
+                <a href="#">Remove Member</a>
+            </div>
+        </aside>
+        
+        <article class="docs-content">
+            <h1>API Reference</h1>
+            <p>The Vault API is a REST API that allows you to manage projects, secrets, environments, and team members programmatically. All requests must be authenticated with an API token.</p>
+            
+            <h2>Base URL</h2>
+            <pre><code>https://api.vault.dev/v1</code></pre>
+            
+            <h2>Authentication</h2>
+            <p>All API requests require a bearer token in the Authorization header:</p>
+            <pre><code>Authorization: Bearer vlt_your_api_token_here</code></pre>
+            
+            <p>You can generate API tokens from your dashboard under Settings → API Tokens. Tokens can be scoped to specific projects and actions.</p>
+            
+            <h2>Rate Limits</h2>
+            <p>The API is rate limited to 100 requests per minute per token. Rate limit headers are included in every response:</p>
+            <pre><code>X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 95
+X-RateLimit-Reset: 1706789400</code></pre>
+            
+            <h2>Endpoints</h2>
+            
+            <div class="api-section">
+                <h3><span class="api-method get">GET</span><span class="api-endpoint">/projects</span></h3>
+                <p>List all projects you have access to.</p>
+                
+                <h4>Response</h4>
+                <pre><code>{
+  "data": [
+    {
+      "id": "proj_abc123",
+      "name": "my-api",
+      "created_at": "2025-12-01T10:00:00Z",
+      "environments": ["development", "staging", "production"]
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "per_page": 20
+  }
+}</code></pre>
+            </div>
+            
+            <div class="api-section">
+                <h3><span class="api-method post">POST</span><span class="api-endpoint">/projects</span></h3>
+                <p>Create a new project.</p>
+                
+                <h4>Request Body</h4>
+                <pre><code>{
+  "name": "my-new-project",
+  "description": "Optional project description"
+}</code></pre>
+                
+                <h4>Response</h4>
+                <pre><code>{
+  "data": {
+    "id": "proj_xyz789",
+    "name": "my-new-project",
+    "description": "Optional project description",
+    "created_at": "2026-01-30T15:30:00Z",
+    "environments": ["development", "staging", "production"]
+  }
+}</code></pre>
+            </div>
+            
+            <div class="api-section">
+                <h3><span class="api-method get">GET</span><span class="api-endpoint">/projects/:id/secrets</span></h3>
+                <p>List all secrets in a project for a specific environment.</p>
+                
+                <h4>Query Parameters</h4>
+                <ul>
+                    <li><code>environment</code> (required) – The environment name (e.g., "production")</li>
+                </ul>
+                
+                <h4>Response</h4>
+                <pre><code>{
+  "data": [
+    {
+      "key": "DATABASE_URL",
+      "value": "postgres://user:pass@host:5432/db",
+      "updated_at": "2026-01-28T12:00:00Z",
+      "updated_by": "user_abc123"
+    },
+    {
+      "key": "STRIPE_SECRET_KEY",
+      "value": "sk_live_...",
+      "updated_at": "2026-01-15T09:30:00Z",
+      "updated_by": "user_abc123"
+    }
+  ]
+}</code></pre>
+            </div>
+            
+            <div class="api-section">
+                <h3><span class="api-method post">POST</span><span class="api-endpoint">/projects/:id/secrets</span></h3>
+                <p>Create or update a secret.</p>
+                
+                <h4>Request Body</h4>
+                <pre><code>{
+  "environment": "production",
+  "key": "NEW_SECRET",
+  "value": "secret_value_here"
+}</code></pre>
+                
+                <h4>Response</h4>
+                <pre><code>{
+  "data": {
+    "key": "NEW_SECRET",
+    "environment": "production",
+    "created_at": "2026-01-30T16:00:00Z"
+  }
+}</code></pre>
+            </div>
+            
+            <div class="api-section">
+                <h3><span class="api-method delete">DELETE</span><span class="api-endpoint">/projects/:id/secrets/:key</span></h3>
+                <p>Delete a secret from an environment.</p>
+                
+                <h4>Query Parameters</h4>
+                <ul>
+                    <li><code>environment</code> (required) – The environment name</li>
+                </ul>
+                
+                <h4>Response</h4>
+                <pre><code>{
+  "data": {
+    "deleted": true
+  }
+}</code></pre>
+            </div>
+            
+            <h2>Errors</h2>
+            <p>The API uses standard HTTP status codes. Errors include a JSON body with details:</p>
+            
+            <pre><code>{
+  "error": {
+    "code": "unauthorized",
+    "message": "Invalid API token",
+    "status": 401
+  }
+}</code></pre>
+            
+            <h3>Common Error Codes</h3>
+            <ul>
+                <li><code>400</code> – Bad Request: Invalid parameters</li>
+                <li><code>401</code> – Unauthorized: Invalid or missing token</li>
+                <li><code>403</code> – Forbidden: Token doesn't have required permissions</li>
+                <li><code>404</code> – Not Found: Resource doesn't exist</li>
+                <li><code>429</code> – Too Many Requests: Rate limit exceeded</li>
+                <li><code>500</code> – Internal Server Error: Something went wrong on our end</li>
+            </ul>
+            
+            <h2>SDKs</h2>
+            <p>We provide official SDKs for common languages:</p>
+            <ul>
+                <li><a href="#">Node.js SDK</a> – <code>npm install @vault/sdk</code></li>
+                <li><a href="#">Python SDK</a> – <code>pip install vault-sdk</code></li>
+                <li><a href="#">Go SDK</a> – <code>go get github.com/vault/vault-go</code></li>
+                <li><a href="#">Ruby SDK</a> – <code>gem install vault-sdk</code></li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="index.html" class="wordmark">vault</a>
+                <p>Secrets infrastructure for<br>modern engineering teams.</p>
+            </div>
+            <nav class="footer-nav">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="integrations.html">Integrations</a>
+                    <a href="changelog.html">Changelog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="docs.html">Documentation</a>
+                    <a href="api.html">API Reference</a>
+                    <a href="status.html">Status</a>
+                    <a href="security.html">Security</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="careers.html">Careers</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Vault Technologies, Inc.</span>
+            <div class="legal">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
