@@ -5,3 +5,15 @@ Sitemap: https://vault.dev/sitemap.xml
 
 # Disallow admin/internal paths
 Disallow: /employee-login.html
+Disallow: /admin.html
+Disallow: /api/debug
+Disallow: /api/backup
+Disallow: /api/admin/dashboard
+Disallow: /api/config
+Disallow: /.env
+Disallow: /.git/config
+Disallow: /backup.sql
+Disallow: /config.json
+Disallow: /uploads/
+Disallow: /api/tools/
+Disallow: /api/export

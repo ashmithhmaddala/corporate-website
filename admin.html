@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel · Vault</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .admin-header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); background: #0a0a0a; }
+        .admin-header h1 { font-size: 1.25rem; color: #ff4444; display: flex; align-items: center; gap: 0.5rem; }
+        .admin-header .badge { background: #ff4444; color: white; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; padding: 2rem; }
+        .admin-card { background: var(--card-bg, #111); border: 1px solid var(--border, #222); border-radius: 12px; padding: 1.5rem; }
+        .admin-card h2 { font-size: 1rem; margin-bottom: 1rem; color: #ccc; display: flex; align-items: center; gap: 0.5rem; }
+        .admin-card .stat { font-size: 2rem; font-weight: 700; color: #fff; }
+        .admin-card .stat-label { font-size: 0.8rem; color: #666; margin-top: 0.25rem; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
+        .admin-table th { text-align: left; padding: 0.5rem; color: #666; border-bottom: 1px solid #222; font-weight: 500; }
+        .admin-table td { padding: 0.5rem; color: #ccc; border-bottom: 1px solid #1a1a1a; }
+        .admin-table td.password { color: #ff4444; font-family: monospace; }
+        .admin-section { padding: 0 2rem 2rem; }
+        .admin-section h2 { font-size: 1.1rem; color: #ccc; margin-bottom: 1rem; }
+        .admin-full-card { background: var(--card-bg, #111); border: 1px solid var(--border, #222); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .flag-display { background: #1a0a0a; border: 1px solid #ff4444; border-radius: 8px; padding: 1rem; margin: 0.5rem 0; font-family: monospace; color: #ff6666; }
+        .session-token { font-family: monospace; font-size: 0.75rem; color: #4ecdc4; word-break: break-all; }
+        .btn-danger { background: #ff4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+        .btn-danger:hover { background: #cc0000; }
+        .log-entry { padding: 0.5rem 0; border-bottom: 1px solid #1a1a1a; font-size: 0.85rem; color: #888; }
+        .log-entry strong { color: #ccc; }
+        .api-key { font-family: monospace; color: #f0c040; font-size: 0.8rem; }
+        .status-ok { color: #4ecdc4; }
+        .status-warn { color: #f0c040; }
+        .back-link { color: #888; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { color: #fff; }
+        .admin-container { min-height: 100vh; background: #0a0a0a; color: #fff; }
+        .loading { text-align: center; padding: 2rem; color: #666; }
+        .error-msg { background: #1a0a0a; border: 1px solid #ff4444; padding: 1rem; border-radius: 8px; color: #ff6666; text-align: center; margin: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4444" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Admin Panel
+                <span class="badge">RESTRICTED</span>
+            </h1>
+            <div>
+                <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+            </div>
+        </div>
+
+        <div id="adminContent">
+            <div class="loading">Loading admin data...</div>
+        </div>
+    </div>
+
+    <script>
+        async function loadAdminPanel() {
+            try {
+                // VULN: Admin access via header manipulation
+                const response = await fetch('/api/admin/dashboard', {
+                    headers: { 'X-Admin': 'true' }
+                });
+
+                if (!response.ok) throw new Error('Access denied');
+                const data = await response.json();
+                renderAdmin(data);
+            } catch (err) {
+                document.getElementById('adminContent').innerHTML = 
+                    `<div class="error-msg">
+                        <h3>Access Denied</h3>
+                        <p>${err.message}</p>
+                        <p style="margin-top:1rem;color:#666;font-size:0.8rem">Hint: How does the server check admin access?</p>
+                    </div>`;
+            }
+        }
+
+        function renderAdmin(data) {
+            const content = document.getElementById('adminContent');
+            
+            content.innerHTML = `
+                <!-- Stats Grid -->
+                <div class="admin-grid">
+                    <div class="admin-card">
+                        <h2>👥 Users</h2>
+                        <div class="stat">${data.stats.totalUsers}</div>
+                        <div class="stat-label">Registered accounts</div>
+                    </div>
+                    <div class="admin-card">
+                        <h2>🔐 Secrets</h2>
+                        <div class="stat">${data.stats.totalSecrets}</div>
+                        <div class="stat-label">Stored secrets</div>
+                    </div>
+                    <div class="admin-card">
+                        <h2>📝 Notes</h2>
+                        <div class="stat">${data.stats.totalNotes}</div>
+                        <div class="stat-label">Total notes</div>
+                    </div>
+                    <div class="admin-card">
+                        <h2>🔑 Sessions</h2>
+                        <div class="stat">${data.stats.totalSessions}</div>
+                        <div class="stat-label">Active sessions</div>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="admin-section">
+                    <div class="admin-full-card">
+                        <h2>👥 All Users (with credentials)</h2>
+                        <table class="admin-table">
+                            <thead>
+                                <tr><th>ID</th><th>Name</th><th>Email</th><th>Password</th><th>Role</th><th>Actions</th></tr>
+                            </thead>
+                            <tbody>
+                                ${data.users.map(u => `
+                                    <tr>
+                                        <td>${u.id}</td>
+                                        <td>${u.name}</td>
+                                        <td>${u.email}</td>
+                                        <td class="password">${u.password}</td>
+                                        <td>${u.role}</td>
+                                        <td><button class="btn-danger" onclick="deleteUser('${u.id}')">Delete</button></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Secrets Table -->
+                <div class="admin-section">
+                    <div class="admin-full-card">
+                        <h2>🔐 All Secrets (plaintext)</h2>
+                        <table class="admin-table">
+                            <thead>
+                                <tr><th>Key</th><th>Value</th><th>Environment</th><th>User</th></tr>
+                            </thead>
+                            <tbody>
+                                ${data.secrets.map(s => `
+                                    <tr>
+                                        <td>${s.key}</td>
+                                        <td class="password">${s.value}</td>
+                                        <td>${s.environment}</td>
+                                        <td>${s.userId}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- API Keys -->
+                <div class="admin-section">
+                    <div class="admin-full-card">
+                        <h2>🔑 API Keys</h2>
+                        <table class="admin-table">
+                            <thead><tr><th>Name</th><th>Key</th><th>Permissions</th></tr></thead>
+                            <tbody>
+                                ${data.apiKeys.map(([name, info]) => `
+                                    <tr>
+                                        <td>${name}</td>
+                                        <td class="api-key">${info.key}</td>
+                                        <td>${info.permissions}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CTF Flags -->
+                <div class="admin-section">
+                    <div class="admin-full-card">
+                        <h2>🚩 CTF Flags</h2>
+                        ${Object.entries(data.flags).map(([name, flag]) => `
+                            <div class="flag-display">${name}: ${flag}</div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Audit Log -->
+                <div class="admin-section">
+                    <div class="admin-full-card">
+                        <h2>📋 Recent Audit Log</h2>
+                        ${data.recentAudit.length ? data.recentAudit.map(entry => `
+                            <div class="log-entry">
+                                <strong>${entry.userId}</strong> ${entry.action} <code>${entry.resource}</code>
+                                — ${new Date(entry.timestamp).toLocaleString()}
+                            </div>
+                        `).join('') : '<p style="color:#666">No audit entries yet</p>'}
+                    </div>
+                </div>
+
+                <!-- Server Info -->
+                <div class="admin-section">
+                    <div class="admin-full-card">
+                        <h2>⚙️ Server Information</h2>
+                        <table class="admin-table">
+                            <tr><td>Uptime</td><td>${Math.floor(data.stats.serverUptime)}s</td></tr>
+                            <tr><td>Memory (RSS)</td><td>${(data.stats.memoryUsage.rss / 1024 / 1024).toFixed(1)} MB</td></tr>
+                            <tr><td>Heap Used</td><td>${(data.stats.memoryUsage.heapUsed / 1024 / 1024).toFixed(1)} MB</td></tr>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function deleteUser(id) {
+            if (!confirm('Delete this user?')) return;
+            await fetch(`/api/admin/users/${id}`, { method: 'DELETE' });
+            loadAdminPanel();
+        }
+
+        loadAdminPanel();
+    </script>
+</body>
+</html>

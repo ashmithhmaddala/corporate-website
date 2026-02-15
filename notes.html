@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes · Vault</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .notes-layout { display: flex; min-height: 100vh; }
+        .notes-main { flex: 1; padding: 0; }
+        .notes-header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); }
+        .notes-header h1 { font-size: 1.25rem; }
+        .notes-header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; }
+        .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; padding: 2rem; }
+        .note-card { background: var(--card-bg, #111); border: 1px solid var(--border, #222); border-radius: 12px; padding: 1.5rem; transition: border-color 0.2s; cursor: pointer; }
+        .note-card:hover { border-color: #444; }
+        .note-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #fff; }
+        .note-card .note-body { font-size: 0.875rem; color: #888; line-height: 1.5; max-height: 100px; overflow: hidden; }
+        .note-card .note-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid #1a1a1a; font-size: 0.75rem; color: #555; }
+        .note-card .note-author { color: #888; }
+        .note-badge { background: #1a2a1a; color: #4ecdc4; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.7rem; }
+        .note-badge.private { background: #2a1a1a; color: #ff6b6b; }
+
+        /* Create/Edit Modal */
+        .note-modal { display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; }
+        .note-modal.show { display: flex; }
+        .note-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.7); }
+        .note-modal-content { position: relative; width: 90%; max-width: 600px; background: #111; border: 1px solid #222; border-radius: 16px; padding: 2rem; }
+        .note-modal-content h2 { font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .note-modal-content .field { margin-bottom: 1rem; }
+        .note-modal-content label { display: block; font-size: 0.85rem; color: #888; margin-bottom: 0.4rem; }
+        .note-modal-content input, .note-modal-content textarea { width: 100%; background: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 0.6rem 0.8rem; color: #fff; font-size: 0.9rem; font-family: inherit; }
+        .note-modal-content textarea { min-height: 150px; resize: vertical; }
+        .note-modal-content input:focus, .note-modal-content textarea:focus { outline: none; border-color: #4ecdc4; }
+        .note-modal-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem; }
+        .checkbox-field { display: flex; align-items: center; gap: 0.5rem; }
+        .checkbox-field input[type="checkbox"] { width: auto; }
+
+        /* Detail View */
+        .note-detail { display: none; padding: 2rem; }
+        .note-detail.show { display: block; }
+        .note-detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+        .note-detail h2 { font-size: 1.5rem; }
+        .note-detail .note-content { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 1.5rem; line-height: 1.7; color: #ccc; font-size: 0.95rem; }
+        .note-detail .note-info { display: flex; gap: 1.5rem; margin-bottom: 1rem; font-size: 0.85rem; color: #666; }
+        
+        /* Comments */
+        .comments-section { margin-top: 2rem; }
+        .comments-section h3 { font-size: 1rem; margin-bottom: 1rem; color: #ccc; }
+        .comment { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; }
+        .comment .comment-author { font-size: 0.85rem; color: #4ecdc4; margin-bottom: 0.25rem; }
+        .comment .comment-body { font-size: 0.9rem; color: #aaa; }
+        .comment .comment-time { font-size: 0.75rem; color: #555; margin-top: 0.5rem; }
+        .comment-form { display: flex; gap: 0.75rem; margin-top: 1rem; }
+        .comment-form input { flex: 1; }
+
+        .empty-notes { text-align: center; padding: 4rem 2rem; color: #555; }
+        .empty-notes svg { margin-bottom: 1rem; opacity: 0.3; }
+        .empty-notes h3 { color: #888; margin-bottom: 0.5rem; }
+
+        .btn-back { background: none; border: 1px solid #333; color: #888; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        .btn-back:hover { border-color: #555; color: #ccc; }
+        .btn-delete { background: #ff4444; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        .btn-delete:hover { background: #cc0000; }
+
+        .toast { position: fixed; bottom: 2rem; right: 2rem; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.85rem; opacity: 0; transform: translateY(10px); transition: all 0.3s; z-index: 2000; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #1a2a1a; color: #4ecdc4; border: 1px solid #2a4a2a; }
+        .toast.error { background: #2a1a1a; color: #ff6b6b; border: 1px solid #4a2a2a; }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="app-layout">
+        <!-- Sidebar (same as dashboard) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="wordmark">vault</a>
+            </div>
+            <div class="sidebar-section">
+                <label class="sidebar-label">Organization</label>
+                <div class="org-selector">
+                    <div class="org-icon">A</div>
+                    <span>Acme Corp</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Secrets
+                </a>
+                <a href="#" class="nav-item active">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    Notes
+                </a>
+                <a href="tools.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Tools
+                </a>
+                <a href="export.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Export
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Profile
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar" id="userAvatar">?</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userName">User</span>
+                        <span class="user-email" id="userEmail">user@vault.dev</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="notes-main">
+            <!-- Header -->
+            <div class="notes-header">
+                <div>
+                    <h1>Notes</h1>
+                    <p>Create and share notes with your team</p>
+                </div>
+                <button class="btn-primary" id="createNoteBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    New Note
+                </button>
+            </div>
+
+            <!-- Notes List View -->
+            <div id="notesListView">
+                <div class="notes-grid" id="notesGrid">
+                    <div class="empty-notes" id="emptyNotes">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        <h3>No notes yet</h3>
+                        <p>Create your first note to get started</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Note Detail View -->
+            <div class="note-detail" id="noteDetail">
+                <div class="note-detail-header">
+                    <button class="btn-back" onclick="showNotesList()">← Back to Notes</button>
+                    <button class="btn-delete" id="deleteNoteBtn">Delete Note</button>
+                </div>
+                <h2 id="detailTitle"></h2>
+                <div class="note-info">
+                    <span id="detailAuthor"></span>
+                    <span id="detailDate"></span>
+                    <span id="detailVisibility"></span>
+                </div>
+                <!-- VULN: Note content rendered with innerHTML (Stored XSS) -->
+                <div class="note-content" id="detailContent"></div>
+
+                <!-- Comments -->
+                <div class="comments-section">
+                    <h3>Comments</h3>
+                    <div id="commentsList"></div>
+                    <div class="comment-form">
+                        <input type="text" id="commentInput" placeholder="Add a comment..." />
+                        <button class="btn-primary" onclick="addComment()">Post</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Note Modal -->
+    <div class="note-modal" id="noteModal">
+        <div class="note-modal-backdrop" onclick="closeNoteModal()"></div>
+        <div class="note-modal-content">
+            <h2>Create Note</h2>
+            <form id="noteForm">
+                <div class="field">
+                    <label for="noteTitle">Title</label>
+                    <input type="text" id="noteTitle" placeholder="Note title..." required>
+                </div>
+                <div class="field">
+                    <label for="noteContent">Content <span style="color:#555;font-size:0.75rem">(HTML supported)</span></label>
+                    <textarea id="noteContent" placeholder="Write your note... (supports HTML formatting)" required></textarea>
+                </div>
+                <div class="field checkbox-field">
+                    <input type="checkbox" id="notePublic">
+                    <label for="notePublic">Make this note public</label>
+                </div>
+                <div class="note-modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeNoteModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Create Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"><span class="toast-message"></span></div>
+
+    <script>
+        const API_BASE = '';
+        let currentNoteId = null;
+
+        // Auth check
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        const token = localStorage.getItem('token');
+
+        if (!user || !token) {
+            window.location.href = 'login.html';
+        } else {
+            const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+        }
+
+        // Load notes
+        async function loadNotes() {
+            try {
+                const response = await fetch(`${API_BASE}/api/notes`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.status === 401) { window.location.href = 'login.html'; return; }
+                const notes = await response.json();
+                renderNotes(notes);
+            } catch (err) {
+                console.error('Failed to load notes:', err);
+            }
+        }
+
+        function renderNotes(notes) {
+            const grid = document.getElementById('notesGrid');
+            const empty = document.getElementById('emptyNotes');
+
+            if (!notes.length) {
+                grid.innerHTML = '';
+                grid.appendChild(empty);
+                empty.style.display = 'block';
+                return;
+            }
+
+            empty.style.display = 'none';
+            // VULN: innerHTML with unsanitized title & content (Stored XSS)
+            grid.innerHTML = notes.map(note => `
+                <div class="note-card" onclick="viewNote('${note.id}')">
+                    <h3>${note.title}</h3>
+                    <div class="note-body">${note.content}</div>
+                    <div class="note-meta">
+                        <span class="note-author">By ${note.author}</span>
+                        <span class="note-badge ${note.isPublic ? '' : 'private'}">${note.isPublic ? 'Public' : 'Private'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // View single note
+        async function viewNote(id) {
+            try {
+                const response = await fetch(`${API_BASE}/api/notes/${id}`);
+                const note = await response.json();
+                currentNoteId = id;
+
+                // VULN: innerHTML with unsanitized content (Stored XSS)
+                document.getElementById('detailTitle').innerHTML = note.title;
+                document.getElementById('detailContent').innerHTML = note.content;
+                document.getElementById('detailAuthor').textContent = `By ${note.author}`;
+                document.getElementById('detailDate').textContent = new Date(note.createdAt).toLocaleString();
+                document.getElementById('detailVisibility').textContent = note.isPublic ? 'Public' : 'Private';
+
+                // Render comments
+                const commentsList = document.getElementById('commentsList');
+                commentsList.innerHTML = (note.comments || []).map(c => `
+                    <div class="comment">
+                        <div class="comment-author">${c.author}</div>
+                        <div class="comment-body">${c.content}</div>
+                        <div class="comment-time">${new Date(c.createdAt).toLocaleString()}</div>
+                    </div>
+                `).join('') || '<p style="color:#555;font-size:0.85rem">No comments yet</p>';
+
+                document.getElementById('notesListView').style.display = 'none';
+                document.getElementById('noteDetail').classList.add('show');
+                document.querySelector('.notes-header').style.display = 'none';
+            } catch (err) {
+                showToast('Failed to load note', 'error');
+            }
+        }
+
+        function showNotesList() {
+            document.getElementById('notesListView').style.display = 'block';
+            document.getElementById('noteDetail').classList.remove('show');
+            document.querySelector('.notes-header').style.display = 'flex';
+            currentNoteId = null;
+            loadNotes();
+        }
+
+        // Create note
+        document.getElementById('createNoteBtn').addEventListener('click', () => {
+            document.getElementById('noteModal').classList.add('show');
+        });
+
+        function closeNoteModal() {
+            document.getElementById('noteModal').classList.remove('show');
+            document.getElementById('noteForm').reset();
+        }
+
+        document.getElementById('noteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('noteTitle').value;
+            const content = document.getElementById('noteContent').value;
+            const isPublic = document.getElementById('notePublic').checked;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/notes`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, content, isPublic })
+                });
+
+                if (response.ok) {
+                    showToast('Note created successfully', 'success');
+                    closeNoteModal();
+                    loadNotes();
+                } else {
+                    const err = await response.json();
+                    showToast(err.error || 'Failed to create note', 'error');
+                }
+            } catch (err) {
+                showToast('Failed to create note', 'error');
+            }
+        });
+
+        // Add comment
+        async function addComment() {
+            const content = document.getElementById('commentInput').value;
+            if (!content || !currentNoteId) return;
+
+            try {
+                await fetch(`${API_BASE}/api/notes/${currentNoteId}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ content })
+                });
+
+                document.getElementById('commentInput').value = '';
+                viewNote(currentNoteId);
+                showToast('Comment added', 'success');
+            } catch (err) {
+                showToast('Failed to add comment', 'error');
+            }
+        }
+
+        // Delete note
+        document.getElementById('deleteNoteBtn').addEventListener('click', async () => {
+            if (!currentNoteId || !confirm('Delete this note?')) return;
+
+            try {
+                await fetch(`${API_BASE}/api/notes/${currentNoteId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                showToast('Note deleted', 'success');
+                showNotesList();
+            } catch (err) {
+                showToast('Failed to delete note', 'error');
+            }
+        });
+
+        // Toast
+        function showToast(message, type) {
+            const t = document.getElementById('toast');
+            t.querySelector('.toast-message').textContent = message;
+            t.className = `toast ${type} show`;
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        loadNotes();
+    </script>
+</body>
+</html>

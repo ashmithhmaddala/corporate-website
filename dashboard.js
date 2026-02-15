@@ -102,6 +102,7 @@ function setupUserMenu() {
     const menuBtn = document.getElementById('userMenuBtn');
     const dropdown = document.getElementById('userDropdown');
     const logoutBtn = document.getElementById('logoutBtn');
+    const profileDropdown = dropdown?.querySelector('.dropdown-item[data-page="profile"]');
 
     menuBtn?.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -115,6 +116,12 @@ function setupUserMenu() {
     logoutBtn?.addEventListener('click', (e) => {
         e.preventDefault();
         logout();
+    });
+
+    // Add navigation for profile dropdown
+    profileDropdown?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = 'profile.html';
     });
 }
 
@@ -144,10 +151,29 @@ function setupSearch() {
 
 function filterSecrets(query) {
     const rows = document.querySelectorAll('.secret-row');
+    let matchCount = 0;
     rows.forEach(row => {
         const key = row.querySelector('.secret-key')?.textContent.toLowerCase();
-        row.style.display = key?.includes(query) ? 'grid' : 'none';
+        const visible = key?.includes(query) || !query;
+        row.style.display = visible ? 'grid' : 'none';
+        if (visible) matchCount++;
     });
+
+    // Show search feedback
+    let searchFeedback = document.getElementById('searchFeedback');
+    if (!searchFeedback) {
+        searchFeedback = document.createElement('div');
+        searchFeedback.id = 'searchFeedback';
+        searchFeedback.style.cssText = 'padding: 1rem; font-size: 0.875rem; color: var(--text-muted);';
+        document.getElementById('secretsList')?.appendChild(searchFeedback);
+    }
+
+    if (query && matchCount === 0) {
+        searchFeedback.innerHTML = 'No results found for "<strong>' + query + '</strong>"';
+        searchFeedback.style.display = 'block';
+    } else {
+        searchFeedback.style.display = 'none';
+    }
 }
 
 // Modal
@@ -280,6 +306,11 @@ async function createSecret(data) {
         },
         body: JSON.stringify(data)
     });
+
+    if (response.status === 401) {
+        logout();
+        return;
+    }
 
     if (!response.ok) {
         const error = await response.json();

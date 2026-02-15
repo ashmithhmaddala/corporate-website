@@ -167,10 +167,45 @@
     </main>
     
     <script>
-        document.getElementById('employeeLoginForm')?.addEventListener('submit', (e) => {
+        document.getElementById('employeeLoginForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Add your employee login logic here
-            console.log('Employee login submitted');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            
+            btn.textContent = 'Signing in...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // VULN: Redirect based on role from response (trusting client-side data)
+                    if (data.user.role === 'admin' || data.user.role === 'superadmin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    // VULN: Verbose error message tells user exactly what's wrong
+                    alert(data.error || 'Login failed');
+                    btn.textContent = 'Sign in';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+                btn.textContent = 'Sign in';
+                btn.disabled = false;
+            }
         });
     </script>
 </body>

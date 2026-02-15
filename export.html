@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export · Vault</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .export-main { flex: 1; padding: 0; }
+        .export-header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); }
+        .export-header h1 { font-size: 1.25rem; }
+        .export-header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; }
+        .export-content { padding: 2rem; max-width: 900px; }
+        .export-card { background: var(--card-bg, #111); border: 1px solid var(--border, #222); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .export-card h2 { font-size: 1rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .export-card p { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
+        .export-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+        .export-option { padding: 1rem; border: 1px solid #222; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .export-option:hover { border-color: #444; }
+        .export-option.selected { border-color: #4ecdc4; background: rgba(78, 205, 196, 0.05); }
+        .export-option h3 { font-size: 0.9rem; color: #fff; margin-bottom: 0.25rem; }
+        .export-option p { font-size: 0.75rem; color: #666; margin: 0; }
+        .export-preview { background: #050505; border: 1px solid #1a1a1a; border-radius: 8px; padding: 1rem; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.8rem; color: #4ecdc4; white-space: pre-wrap; max-height: 400px; overflow-y: auto; margin-top: 1rem; }
+        .export-actions { display: flex; gap: 0.75rem; margin-top: 1rem; }
+        .btn-export { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .stat-row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid #1a1a1a; }
+        .stat-label { color: #888; font-size: 0.85rem; }
+        .stat-value { color: #fff; font-size: 0.85rem; font-weight: 500; }
+        .warn-banner { background: #2a1a0a; border: 1px solid #f0c040; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; color: #f0c040; font-size: 0.85rem; display: flex; align-items: center; gap: 0.75rem; }
+
+        .toast { position: fixed; bottom: 2rem; right: 2rem; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.85rem; opacity: 0; transform: translateY(10px); transition: all 0.3s; z-index: 2000; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #1a2a1a; color: #4ecdc4; border: 1px solid #2a4a2a; }
+        .toast.error { background: #2a1a1a; color: #ff6b6b; border: 1px solid #4a2a2a; }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="wordmark">vault</a>
+            </div>
+            <div class="sidebar-section">
+                <label class="sidebar-label">Organization</label>
+                <div class="org-selector">
+                    <div class="org-icon">A</div>
+                    <span>Acme Corp</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Secrets
+                </a>
+                <a href="notes.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    Notes
+                </a>
+                <a href="tools.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Tools
+                </a>
+                <a href="#" class="nav-item active">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Export
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Profile
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar" id="userAvatar">?</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userName">User</span>
+                        <span class="user-email" id="userEmail">user@vault.dev</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="export-main">
+            <div class="export-header">
+                <div>
+                    <h1>Export & Backup</h1>
+                    <p>Export your secrets and data in various formats</p>
+                </div>
+            </div>
+
+            <div class="export-content">
+                <div class="warn-banner">
+                    ⚠️ Exported data contains plaintext secret values. Handle with care.
+                </div>
+
+                <!-- Stats -->
+                <div class="export-card">
+                    <h2>📊 Data Overview</h2>
+                    <div class="stat-row"><span class="stat-label">Total Secrets</span><span class="stat-value" id="statSecrets">-</span></div>
+                    <div class="stat-row"><span class="stat-label">Production</span><span class="stat-value" id="statProd">-</span></div>
+                    <div class="stat-row"><span class="stat-label">Staging</span><span class="stat-value" id="statStaging">-</span></div>
+                    <div class="stat-row"><span class="stat-label">Development</span><span class="stat-value" id="statDev">-</span></div>
+                    <div class="stat-row"><span class="stat-label">Users</span><span class="stat-value" id="statUsers">-</span></div>
+                </div>
+
+                <!-- Export Options -->
+                <div class="export-card">
+                    <h2>📦 Export Secrets</h2>
+                    <p>Choose export format and download your secrets</p>
+                    
+                    <div class="export-options">
+                        <div class="export-option selected" onclick="selectFormat('json', this)">
+                            <h3>JSON</h3>
+                            <p>Full structured data with metadata</p>
+                        </div>
+                        <div class="export-option" onclick="selectFormat('env', this)">
+                            <h3>.env</h3>
+                            <p>KEY=VALUE format for environments</p>
+                        </div>
+                        <div class="export-option" onclick="selectFormat('csv', this)">
+                            <h3>CSV</h3>
+                            <p>Spreadsheet-compatible format</p>
+                        </div>
+                    </div>
+
+                    <div class="export-actions">
+                        <button class="btn-primary btn-export" onclick="exportSecrets()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Download Export
+                        </button>
+                        <button class="btn-secondary" onclick="previewExport()">Preview</button>
+                    </div>
+
+                    <div class="export-preview" id="exportPreview" style="display:none"></div>
+                </div>
+
+                <!-- Full Backup -->
+                <div class="export-card">
+                    <h2>💾 Full Backup</h2>
+                    <p>Download a complete backup of all data including users, secrets, notes, and audit logs</p>
+                    <div class="export-actions">
+                        <button class="btn-primary btn-export" onclick="fullBackup()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Download Full Backup
+                        </button>
+                        <button class="btn-secondary" onclick="previewBackup()">Preview</button>
+                    </div>
+                    <div class="export-preview" id="backupPreview" style="display:none"></div>
+                </div>
+
+                <!-- API Endpoints -->
+                <div class="export-card">
+                    <h2>🔗 Direct API Access</h2>
+                    <p>Use these endpoints for programmatic access to export data</p>
+                    <div style="font-family:monospace;font-size:0.85rem;color:#888;line-height:2">
+                        <div><span style="color:#4ecdc4">GET</span> /api/export - Export all secrets (JSON)</div>
+                        <div><span style="color:#4ecdc4">GET</span> /api/export?format=env - Export as .env file</div>
+                        <div><span style="color:#ff6b6b">GET</span> /api/backup - Full database backup (no auth required!)</div>
+                        <div><span style="color:#ff6b6b">GET</span> /api/debug - Debug info with all sessions</div>
+                        <div><span style="color:#ff6b6b">GET</span> /api/config - App configuration with credentials</div>
+                        <div><span style="color:#ff6b6b">GET</span> /.env - Environment variables file</div>
+                        <div><span style="color:#ff6b6b">GET</span> /backup.sql - Database SQL dump</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast" id="toast"><span class="toast-message"></span></div>
+
+    <script>
+        const API_BASE = '';
+        let exportFormat = 'json';
+        
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        const token = localStorage.getItem('token');
+        if (!user || !token) { window.location.href = 'login.html'; }
+        else {
+            const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+        }
+
+        // Load stats
+        async function loadStats() {
+            try {
+                const res = await fetch(`${API_BASE}/api/health`);
+                const data = await res.json();
+                document.getElementById('statSecrets').textContent = data.secrets_count;
+                document.getElementById('statUsers').textContent = data.users_count;
+
+                // Get detailed counts
+                const secretsRes = await fetch(`${API_BASE}/api/secrets`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (secretsRes.ok) {
+                    const secrets = await secretsRes.json();
+                    document.getElementById('statProd').textContent = secrets.filter(s => s.environment === 'production').length;
+                    document.getElementById('statStaging').textContent = secrets.filter(s => s.environment === 'staging').length;
+                    document.getElementById('statDev').textContent = secrets.filter(s => s.environment === 'development').length;
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        function selectFormat(format, el) {
+            exportFormat = format;
+            document.querySelectorAll('.export-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        async function exportSecrets() {
+            try {
+                const res = await fetch(`${API_BASE}/api/export?format=${exportFormat}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (exportFormat === 'env') {
+                    const text = await res.text();
+                    downloadFile('secrets.env', text, 'text/plain');
+                } else {
+                    const data = await res.json();
+                    if (exportFormat === 'csv') {
+                        const csv = 'Key,Value,Environment,Created\n' + 
+                            data.secrets.map(s => `"${s.key}","${s.value}","${s.environment}","${s.createdAt}"`).join('\n');
+                        downloadFile('secrets.csv', csv, 'text/csv');
+                    } else {
+                        downloadFile('secrets.json', JSON.stringify(data, null, 2), 'application/json');
+                    }
+                }
+                showToast('Export downloaded', 'success');
+            } catch (err) { showToast('Export failed: ' + err.message, 'error'); }
+        }
+
+        async function previewExport() {
+            try {
+                const res = await fetch(`${API_BASE}/api/export?format=${exportFormat}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const preview = document.getElementById('exportPreview');
+                
+                if (exportFormat === 'env') {
+                    preview.textContent = await res.text();
+                } else {
+                    const data = await res.json();
+                    preview.textContent = JSON.stringify(data, null, 2);
+                }
+                preview.style.display = 'block';
+            } catch (err) { showToast('Preview failed', 'error'); }
+        }
+
+        async function fullBackup() {
+            try {
+                const res = await fetch(`${API_BASE}/api/backup`);
+                const data = await res.json();
+                downloadFile('vault-backup.json', JSON.stringify(data, null, 2), 'application/json');
+                showToast('Full backup downloaded', 'success');
+            } catch (err) { showToast('Backup failed', 'error'); }
+        }
+
+        async function previewBackup() {
+            try {
+                const res = await fetch(`${API_BASE}/api/backup`);
+                const data = await res.json();
+                const preview = document.getElementById('backupPreview');
+                preview.textContent = JSON.stringify(data, null, 2);
+                preview.style.display = 'block';
+            } catch (err) { showToast('Preview failed', 'error'); }
+        }
+
+        function downloadFile(filename, content, type) {
+            const blob = new Blob([content], { type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.querySelector('.toast-message').textContent = msg;
+            t.className = `toast ${type} show`;
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        loadStats();
+    </script>
+</body>
+</html>

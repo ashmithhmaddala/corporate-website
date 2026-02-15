@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tools · Vault</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        .tools-main { flex: 1; padding: 0; }
+        .tools-header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); }
+        .tools-header h1 { font-size: 1.25rem; }
+        .tools-header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem; }
+        .tools-content { padding: 2rem; }
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; }
+        .tool-card { background: var(--card-bg, #111); border: 1px solid var(--border, #222); border-radius: 12px; padding: 1.5rem; }
+        .tool-card h2 { font-size: 1rem; margin-bottom: 0.5rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+        .tool-card p { font-size: 0.85rem; color: #666; margin-bottom: 1rem; }
+        .tool-form { display: flex; flex-direction: column; gap: 0.75rem; }
+        .tool-form .input-group { display: flex; gap: 0.5rem; }
+        .tool-form input, .tool-form textarea, .tool-form select { width: 100%; background: #0a0a0a; border: 1px solid #222; border-radius: 8px; padding: 0.6rem 0.8rem; color: #fff; font-size: 0.9rem; font-family: inherit; }
+        .tool-form textarea { min-height: 80px; resize: vertical; }
+        .tool-form input:focus, .tool-form textarea:focus { outline: none; border-color: #4ecdc4; }
+        .tool-output { background: #050505; border: 1px solid #1a1a1a; border-radius: 8px; padding: 1rem; margin-top: 1rem; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.8rem; color: #4ecdc4; white-space: pre-wrap; max-height: 300px; overflow-y: auto; display: none; }
+        .tool-output.show { display: block; }
+        .tool-output.error { color: #ff6b6b; }
+        .tool-loading { display: none; color: #666; font-size: 0.85rem; padding: 0.5rem 0; }
+        .tool-loading.show { display: block; }
+
+        .import-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .import-tab { background: none; border: 1px solid #222; color: #888; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem; }
+        .import-tab.active { border-color: #4ecdc4; color: #4ecdc4; }
+
+        .file-browser { margin-top: 1rem; }
+        .file-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.85rem; color: #aaa; cursor: pointer; }
+        .file-item:hover { background: #1a1a1a; color: #fff; }
+        .file-item.directory { color: #4ecdc4; }
+        .file-item svg { flex-shrink: 0; }
+
+        .toast { position: fixed; bottom: 2rem; right: 2rem; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.85rem; opacity: 0; transform: translateY(10px); transition: all 0.3s; z-index: 2000; }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success { background: #1a2a1a; color: #4ecdc4; border: 1px solid #2a4a2a; }
+        .toast.error { background: #2a1a1a; color: #ff6b6b; border: 1px solid #4a2a2a; }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="wordmark">vault</a>
+            </div>
+            <div class="sidebar-section">
+                <label class="sidebar-label">Organization</label>
+                <div class="org-selector">
+                    <div class="org-icon">A</div>
+                    <span>Acme Corp</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Secrets
+                </a>
+                <a href="notes.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                    Notes
+                </a>
+                <a href="#" class="nav-item active">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Tools
+                </a>
+                <a href="export.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Export
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Profile
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-menu">
+                    <div class="user-avatar" id="userAvatar">?</div>
+                    <div class="user-info">
+                        <span class="user-name" id="userName">User</span>
+                        <span class="user-email" id="userEmail">user@vault.dev</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="tools-main">
+            <div class="tools-header">
+                <div>
+                    <h1>Network Tools</h1>
+                    <p>Diagnostic and utility tools for your infrastructure</p>
+                </div>
+            </div>
+
+            <div class="tools-content">
+                <div class="tools-grid">
+                    <!-- Ping Tool (Command Injection) -->
+                    <div class="tool-card">
+                        <h2>🏓 Ping</h2>
+                        <p>Check connectivity to a host</p>
+                        <div class="tool-form">
+                            <div class="input-group">
+                                <input type="text" id="pingHost" placeholder="Enter hostname or IP address...">
+                                <button class="btn-primary" onclick="runPing()">Ping</button>
+                            </div>
+                        </div>
+                        <div class="tool-loading" id="pingLoading">Running ping...</div>
+                        <div class="tool-output" id="pingOutput"></div>
+                    </div>
+
+                    <!-- DNS Lookup (Command Injection) -->
+                    <div class="tool-card">
+                        <h2>🔍 DNS Lookup</h2>
+                        <p>Resolve domain names to IP addresses</p>
+                        <div class="tool-form">
+                            <div class="input-group">
+                                <input type="text" id="dnsHost" placeholder="Enter domain name...">
+                                <button class="btn-primary" onclick="runDns()">Lookup</button>
+                            </div>
+                        </div>
+                        <div class="tool-loading" id="dnsLoading">Running DNS lookup...</div>
+                        <div class="tool-output" id="dnsOutput"></div>
+                    </div>
+
+                    <!-- URL Fetch (SSRF) -->
+                    <div class="tool-card">
+                        <h2>🌐 URL Fetch</h2>
+                        <p>Fetch content from any URL for testing</p>
+                        <div class="tool-form">
+                            <div class="input-group">
+                                <input type="text" id="fetchUrl" placeholder="https://example.com">
+                                <button class="btn-primary" onclick="runFetch()">Fetch</button>
+                            </div>
+                        </div>
+                        <div class="tool-loading" id="fetchLoading">Fetching URL...</div>
+                        <div class="tool-output" id="fetchOutput"></div>
+                    </div>
+
+                    <!-- Webhook Tester (SSRF) -->
+                    <div class="tool-card">
+                        <h2>🔗 Webhook Tester</h2>
+                        <p>Test webhook delivery to an endpoint</p>
+                        <div class="tool-form">
+                            <input type="text" id="webhookUrl" placeholder="Webhook URL...">
+                            <textarea id="webhookPayload" placeholder='{"event": "test", "data": {}}'></textarea>
+                            <button class="btn-primary" onclick="testWebhook()">Send Test</button>
+                        </div>
+                        <div class="tool-loading" id="webhookLoading">Sending webhook...</div>
+                        <div class="tool-output" id="webhookOutput"></div>
+                    </div>
+
+                    <!-- Traceroute (Command Injection) -->
+                    <div class="tool-card">
+                        <h2>📡 Traceroute</h2>
+                        <p>Trace the path to a host</p>
+                        <div class="tool-form">
+                            <div class="input-group">
+                                <input type="text" id="traceHost" placeholder="Enter hostname...">
+                                <button class="btn-primary" onclick="runTraceroute()">Trace</button>
+                            </div>
+                        </div>
+                        <div class="tool-loading" id="traceLoading">Running traceroute (may take a while)...</div>
+                        <div class="tool-output" id="traceOutput"></div>
+                    </div>
+
+                    <!-- File Browser (Path Traversal) -->
+                    <div class="tool-card">
+                        <h2>📁 File Browser</h2>
+                        <p>Browse uploaded files and documents</p>
+                        <div class="tool-form">
+                            <div class="input-group">
+                                <input type="text" id="browsePath" placeholder="Directory path (e.g., uploads)" value="uploads">
+                                <button class="btn-primary" onclick="browseFiles()">Browse</button>
+                            </div>
+                        </div>
+                        <div class="tool-loading" id="browseLoading">Loading...</div>
+                        <div class="file-browser tool-output" id="browseOutput"></div>
+                    </div>
+
+                    <!-- Import Secrets -->
+                    <div class="tool-card">
+                        <h2>📥 Import Secrets</h2>
+                        <p>Import secrets from various formats</p>
+                        <div class="tool-form">
+                            <div class="import-tabs">
+                                <button class="import-tab active" onclick="setImportFormat('json', this)">JSON</button>
+                                <button class="import-tab" onclick="setImportFormat('env', this)">ENV</button>
+                                <button class="import-tab" onclick="setImportFormat('auto', this)">Auto</button>
+                                <button class="import-tab" onclick="setImportFormat('xml', this)">XML</button>
+                            </div>
+                            <textarea id="importData" placeholder='{"API_KEY": "abc123", "DB_URL": "postgres://..."}'></textarea>
+                            <button class="btn-primary" onclick="importSecrets()">Import</button>
+                        </div>
+                        <div class="tool-output" id="importOutput"></div>
+                    </div>
+
+                    <!-- Search (SQL Injection) -->
+                    <div class="tool-card">
+                        <h2>🔎 Advanced Search</h2>
+                        <p>Search across all secrets and data</p>
+                        <div class="tool-form">
+                            <div class="input-group">
+                                <input type="text" id="searchQuery" placeholder="Search query...">
+                                <button class="btn-primary" onclick="runSearch()">Search</button>
+                            </div>
+                        </div>
+                        <div class="tool-output" id="searchOutput"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast" id="toast"><span class="toast-message"></span></div>
+
+    <script>
+        const API_BASE = '';
+        let importFormat = 'json';
+
+        // Auth
+        const user = JSON.parse(localStorage.getItem('user') || 'null');
+        const token = localStorage.getItem('token');
+        if (!user || !token) { window.location.href = 'login.html'; }
+        else {
+            const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+        }
+
+        function headers() {
+            return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` };
+        }
+
+        // Ping
+        async function runPing() {
+            const host = document.getElementById('pingHost').value;
+            if (!host) return;
+            showLoading('ping');
+            try {
+                const res = await fetch(`${API_BASE}/api/tools/ping`, {
+                    method: 'POST', headers: headers(), body: JSON.stringify({ host })
+                });
+                const data = await res.json();
+                showOutput('ping', data.output || JSON.stringify(data, null, 2), !data.success);
+            } catch (err) { showOutput('ping', err.message, true); }
+        }
+
+        // DNS
+        async function runDns() {
+            const domain = document.getElementById('dnsHost').value;
+            if (!domain) return;
+            showLoading('dns');
+            try {
+                const res = await fetch(`${API_BASE}/api/tools/dns`, {
+                    method: 'POST', headers: headers(), body: JSON.stringify({ domain })
+                });
+                const data = await res.json();
+                showOutput('dns', data.output || JSON.stringify(data, null, 2), !data.success);
+            } catch (err) { showOutput('dns', err.message, true); }
+        }
+
+        // Traceroute
+        async function runTraceroute() {
+            const host = document.getElementById('traceHost').value;
+            if (!host) return;
+            showLoading('trace');
+            try {
+                const res = await fetch(`${API_BASE}/api/tools/traceroute`, {
+                    method: 'POST', headers: headers(), body: JSON.stringify({ host })
+                });
+                const data = await res.json();
+                showOutput('trace', data.output || JSON.stringify(data, null, 2), !data.success);
+            } catch (err) { showOutput('trace', err.message, true); }
+        }
+
+        // URL Fetch (SSRF)
+        async function runFetch() {
+            const targetUrl = document.getElementById('fetchUrl').value;
+            if (!targetUrl) return;
+            showLoading('fetch');
+            try {
+                const res = await fetch(`${API_BASE}/api/tools/fetch-url`, {
+                    method: 'POST', headers: headers(), body: JSON.stringify({ targetUrl })
+                });
+                const data = await res.json();
+                let output = `Status: ${data.status}\n\n`;
+                if (data.headers) output += `Headers:\n${JSON.stringify(data.headers, null, 2)}\n\n`;
+                output += `Body:\n${data.body || data.error || ''}`;
+                showOutput('fetch', output, !data.success);
+            } catch (err) { showOutput('fetch', err.message, true); }
+        }
+
+        // Webhook
+        async function testWebhook() {
+            const url = document.getElementById('webhookUrl').value;
+            const payloadStr = document.getElementById('webhookPayload').value;
+            if (!url) return;
+            showLoading('webhook');
+            try {
+                let payload;
+                try { payload = JSON.parse(payloadStr); } catch { payload = { data: payloadStr }; }
+                const res = await fetch(`${API_BASE}/api/webhooks/test`, {
+                    method: 'POST', headers: headers(), body: JSON.stringify({ url, payload })
+                });
+                const data = await res.json();
+                showOutput('webhook', JSON.stringify(data, null, 2), !data.success);
+            } catch (err) { showOutput('webhook', err.message, true); }
+        }
+
+        // File Browser (Path Traversal)
+        async function browseFiles() {
+            const dir = document.getElementById('browsePath').value || 'uploads';
+            showLoading('browse');
+            try {
+                const res = await fetch(`${API_BASE}/api/files/list?dir=${encodeURIComponent(dir)}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success && data.files) {
+                    const html = data.files.map(f => `
+                        <div class="file-item ${f.isDirectory ? 'directory' : ''}" 
+                             onclick="${f.isDirectory ? `document.getElementById('browsePath').value='${dir}/${f.name}';browseFiles()` : `downloadFile('${dir}/${f.name}')`}">
+                            ${f.isDirectory ? '📁' : '📄'} ${f.name} 
+                            <span style="margin-left:auto;color:#555;font-size:0.75rem">${f.isDirectory ? '' : (f.size / 1024).toFixed(1) + ' KB'}</span>
+                        </div>
+                    `).join('');
+                    const outputEl = document.getElementById('browseOutput');
+                    outputEl.innerHTML = `<div style="color:#555;font-size:0.75rem;margin-bottom:0.5rem">📂 ${data.directory}</div>` + html;
+                    outputEl.classList.add('show');
+                    document.getElementById('browseLoading').classList.remove('show');
+                } else {
+                    showOutput('browse', data.error || 'Failed to list directory', true);
+                }
+            } catch (err) { showOutput('browse', err.message, true); }
+        }
+
+        async function downloadFile(filename) {
+            try {
+                const res = await fetch(`${API_BASE}/api/files/download?filename=${encodeURIComponent(filename)}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                showOutput('browse', data.content || data.error || JSON.stringify(data), !data.success);
+            } catch (err) { showOutput('browse', err.message, true); }
+        }
+
+        // Import
+        function setImportFormat(format, btn) {
+            importFormat = format;
+            document.querySelectorAll('.import-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const placeholder = {
+                json: '{"API_KEY": "abc123", "DB_URL": "postgres://..."}',
+                env: 'API_KEY=abc123\nDB_URL=postgres://...',
+                auto: '// Auto-detect format (JSON, ENV, or JavaScript expression)',
+                xml: '<secrets>\n  <secret>\n    <key>API_KEY</key>\n    <value>abc123</value>\n    <env>development</env>\n  </secret>\n</secrets>'
+            };
+            document.getElementById('importData').placeholder = placeholder[format] || '';
+        }
+
+        async function importSecrets() {
+            const data = document.getElementById('importData').value;
+            if (!data) return;
+            
+            try {
+                let res;
+                if (importFormat === 'xml') {
+                    res = await fetch(`${API_BASE}/api/import/xml`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/xml', 'Authorization': `Bearer ${token}` },
+                        body: data
+                    });
+                } else {
+                    res = await fetch(`${API_BASE}/api/import`, {
+                        method: 'POST', headers: headers(),
+                        body: JSON.stringify({ data, format: importFormat })
+                    });
+                }
+                const result = await res.json();
+                showOutput('import', JSON.stringify(result, null, 2), !result.success);
+            } catch (err) { showOutput('import', err.message, true); }
+        }
+
+        // Search (SQL Injection)
+        async function runSearch() {
+            const q = document.getElementById('searchQuery').value;
+            if (!q) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/search?q=${encodeURIComponent(q)}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                showOutput('search', JSON.stringify(data, null, 2), !data.success);
+            } catch (err) { showOutput('search', err.message, true); }
+        }
+
+        // Helpers
+        function showLoading(id) {
+            document.getElementById(`${id}Loading`).classList.add('show');
+            document.getElementById(`${id}Output`).classList.remove('show');
+        }
+
+        function showOutput(id, text, isError = false) {
+            const loadingEl = document.getElementById(`${id}Loading`);
+            if (loadingEl) loadingEl.classList.remove('show');
+            const outputEl = document.getElementById(`${id}Output`);
+            outputEl.textContent = text;
+            outputEl.className = `tool-output show${isError ? ' error' : ''}`;
+        }
+
+        function showToast(msg, type) {
+            const t = document.getElementById('toast');
+            t.querySelector('.toast-message').textContent = msg;
+            t.className = `toast ${type} show`;
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
