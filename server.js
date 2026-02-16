@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const CryptoJS = require('crypto-js');
@@ -12,6 +13,7 @@ const url = require('url');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const JWT_SECRET = 'your-super-secret-key-change-this';
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -1730,22 +1732,39 @@ app.post('/api/auth/token', (req, res) => {
     const user = users.get(email);
     if (!user) return res.status(404).json({ error: 'User not found' });
 
-    const token = generateToken();
+    const token = jwt.sign(
+        {
+            userId: user.id,
+            name: user.name,
+            email: user.email,
+            role: role || user.role,  // VULN: Can override role
+            ctf_flag: 'CTF{f0229168e786b107f0192bc88c0287b2}',  // HIDDEN FLAG
+            createdAt: new Date().toISOString()
+        },
+        JWT_SECRET,
+        { expiresIn: '1h' }
+    );
+
+    // Store JWT in sessions
     sessions.set(token, {
         user: { 
             id: user.id, 
             name: user.name, 
             email: user.email, 
-            role: role || user.role // VULN: Can override role
+            role: role || user.role
         },
         createdAt: new Date()
     });
 
     res.json({ 
         success: true, 
-        token, 
-        user: { id: user.id, name: user.name, email: user.email, role: role || user.role },
-        flag: FLAGS.FLAG_JWT_BYPASS
+        token: token,  //Send JWT token
+        user: { 
+            id: user.id, 
+            name: user.name, 
+            email: user.email, 
+            role: role || user.role 
+        }
     });
 });
 
