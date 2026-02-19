@@ -14,7 +14,7 @@
 | 10 | Debug Endpoint Exposed | `GET /api/debug` | `server.js` L1508 — no auth, dumps all sessions, users, passwords, env vars | `CTF{d3bug_3ndp01nt_3xp0s3d}` |
 | 11 | Backup Data Leak | `GET /api/backup`, `/backup.sql` | `server.js` L1548, L1804 — no auth, full database dump with credentials | `CTF{b4ckup_d4t4_l34k3d}` |
 | 12 | Open Redirect | `GET /redirect?url=`, `/api/auth/callback?redirect_uri=` | `server.js` L1180, L1192 — no URL validation | `CTF{0p3n_r3d1r3ct_vuln}` |
-| 13 | Predictable Password Reset | `POST /api/auth/forgot-password` | `server.js` L1365 — token is `base64(email:timestamp)`, leaked in response body | `CTF{pr3d1ct4bl3_r3s3t_t0k3n}` |
+| 13 | Predictable Password Reset | `POST /api/auth/forgot-password` | `forgot-password.html` L — token is btoa(email) (base64 of email), leaked in response body as simulated reset link | `CTF{pr3d1ct4bl3_t0k3ns_4r3_d4ng3r0us}` |
 | 14 | User Enumeration | `GET /api/users/check?email=` | `server.js` L1108 — different response reveals if email exists | `CTF{us3r_3num3r4t10n_l34k}` |
 | 15 | Mass Assignment | `PUT /api/users/update` | `server.js` L1154 — no field filtering, `{"role":"admin"}` escalates privileges | `CTF{m4ss_4ss1gnm3nt_r0l3}` |
 | 16 | Authentication Bypass | `POST /api/auth/token` | `server.js` L1725 — generates valid token with email only, no password required | `CTF{w34k_4uth_byp4ss}` |
