@@ -22,6 +22,9 @@
 | 18 | .env File Exposure | `GET /.env` | `server.js` L1756 — serves production config with DB creds, API keys, admin password | `CTF{3nv_f1l3_3xp0s3d}` |
 | 19 | Information Disclosure | `GET /api/debug/error`, `/api/config`, `/.git/config`, `/config.json` | `server.js` L1585, L1601, L1887, L1860 — stack traces, DB/SMTP creds, deploy tokens | `CTF{1nf0_d1scl0sur3_st4ck_tr4c3}` |
 | 20 | CORS Misconfiguration | Every response | `server.js` L50-L56 — reflects any `Origin` with `Access-Control-Allow-Credentials: true` | `CTF{c0rs_w1ld_c4rd_4cc3ss}` |
+| 21 | SQL Injection - Login Bypass | POST /challenge1 | app.py — Authentication bypass via SQL comment injection | FLAG{sql_login_bypass_success}
+| 22 | SQL Injection - UNION Attack | GET /challenge2?search= | app.py — Data exfiltration from hidden tables using UNION SELECT | FLAG{union_injection_master}
+| 23 | SQL Injection - Blind Boolean | GET /challenge3?id= | app.py — Extract data character-by-character via boolean conditions | FLAG{blind_sqli_champion}
 
 ---
 
