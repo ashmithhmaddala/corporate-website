@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0d0d0d;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ── Card ── */
+.login-box {
+    width: 340px;
+    padding: 48px 40px;
+    background: #141414;
+    border: 1px solid rgba(167, 139, 250, 0.12);
+    border-radius: 16px;
+}
+
+/* ── Heading ── */
+.login-box h2 {
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 32px;
+}
+
+/* ── Inputs ── */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    background: #1c1c1c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+    color: rgba(255, 255, 255, 0.22);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: rgba(167, 139, 250, 0.5);
+    background: rgba(167, 139, 250, 0.04);
+    box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.08);
+}
+
+/* ── Button ── */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    background: #a78bfa;
+    border: none;
+    border-radius: 8px;
+    color: #0d0d0d;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+button:hover {
+    background: #c4b5fd;
+}
+
+button:active {
+    opacity: 0.85;
+}
+
+/* ── Error message ── */
+#message {
+    font-size: 12px;
+    font-weight: 400;
+    color: rgba(255, 100, 100, 0.85);
+    margin-top: 12px;
+    min-height: 16px;
+}

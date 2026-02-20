@@ -1,0 +1,21 @@
+{
+  "name": "ctf-login-challenge",
+  "version": "1.0.0",
+  "description": "CTF Login Challenge - Admin Portal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["ctf", "security", "challenge"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-session": "^1.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
