@@ -13,6 +13,21 @@ const url = require('url');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// --- BACKEND INFORMATION DISCLOSURE CHALLENGE ---
+// This vulnerability leaks a secret flag in the HTTP Response Headers.
+// To find it, hackers must check the Network Tab in DevTools.
+app.use((req, res, next) => {
+    res.setHeader('X-System-Admin-Flag', 'FLAG{H3AD3R_D3T3CT1V3_2026}');
+    next();
+});
+
+
+
+
+
+
+
+
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
@@ -30,6 +45,7 @@ const storage = multer.diskStorage({
     }
 });
 
+
 const upload = multer({
     storage: storage,
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
@@ -45,6 +61,7 @@ const upload = multer({
         }
     }
 });
+
 
 // Middleware
 // VULN: Wide-open CORS - allows any origin with credentials
@@ -503,6 +520,9 @@ app.put('/api/profile', authenticate, (req, res) => {
         res.status(500).json({ success: false, error: 'Failed to update profile' });
     }
 });
+
+
+
 
 // Upload profile picture
 app.post('/api/profile/picture', authenticate, upload.single('profilePicture'), (req, res) => {
