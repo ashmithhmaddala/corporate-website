@@ -25,6 +25,7 @@
 | 21 | SQL Injection - Login Bypass | POST /challenge1 | app.py — Authentication bypass via SQL comment injection | FLAG{sql_login_bypass_success}
 | 22 | SQL Injection - UNION Attack | GET /challenge2?search= | app.py — Data exfiltration from hidden tables using UNION SELECT | FLAG{union_injection_master}
 | 23 | SQL Injection - Blind Boolean | GET /challenge3?id= | app.py — Extract data character-by-character via boolean conditions | FLAG{blind_sqli_champion}
+| 24 | The Forgotten Back Door | POST /api/auth/login?legacy=true | server.js L327-L379 — Legacy auth with MD5 hash from 2018. Hint in changelog.html (2018 entry) and script.js comment. Password: 'admin2018' | FLAG{l3g4cy_4uth_1s_d4ng3r0us}
 
 ---
 
@@ -56,8 +57,9 @@
 
 ## Demo Credentials
 
-| Email | Password | Role |
-|---|---|---|
-| `admin@vault.dev` | `admin123` | admin |
-| `john@acme.com` | `password123` | owner |
-| `jane@acme.com` | `password123` | admin |
+| Email | Password | Role | Notes |
+|---|---|---|---|
+| `admin@vault.dev` | `admin123` | admin | Normal login |
+| `admin@vault.dev` | `admin2018` | admin | Legacy login only (use `/api/auth/login?legacy=true`) |
+| `john@acme.com` | `password123` | owner | |
+| `jane@acme.com` | `password123` | admin | |

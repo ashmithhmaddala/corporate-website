@@ -310,4 +310,7 @@ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     });
 }
 
+// TODO: Remove legacy auth endpoint (/login?legacy=true) - marked for deprecation since 2018
+// Still in use by some old integrations. MD5 hash check for backwards compat.
+
 console.log('Vault · Secrets Infrastructure');

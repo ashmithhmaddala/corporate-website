@@ -328,6 +328,7 @@ app.post('/api/auth/register', (req, res) => {
 app.post('/api/auth/login', (req, res) => {
     try {
         const { email, password } = req.body;
+        const isLegacy = req.query.legacy === 'true';
 
         if (!email || !password) {
             return res.status(400).json({
@@ -337,6 +338,38 @@ app.post('/api/auth/login', (req, res) => {
         }
 
         const user = users.get(email);
+
+        // VULN: Legacy authentication mode using MD5 (deprecated since 2018)
+        // Flag: FLAG{l3g4cy_4uth_1s_d4ng3r0us}
+        if (isLegacy) {
+            // Old 2018 auth: MD5 hash comparison
+            const crypto = require('crypto');
+            const passwordHash = crypto.createHash('md5').update(password).digest('hex');
+            const legacyHash = 'f3f1c26545d2424e5bbc7bf12a8f2dc6'; // MD5 of 'admin2018'
+            
+            if (email === 'admin@vault.dev' && passwordHash === legacyHash) {
+                const token = generateToken();
+                sessions.set(token, {
+                    user: { id: user.id, name: user.name, email: user.email, role: user.role },
+                    createdAt: new Date()
+                });
+                
+                logAudit(user.id, 'logged in (legacy mode)', 'session');
+                
+                return res.json({
+                    success: true,
+                    token,
+                    user: { id: user.id, name: user.name, email: user.email, role: user.role },
+                    flag: 'FLAG{l3g4cy_4uth_1s_d4ng3r0us}',
+                    message: 'Legacy authentication successful - this endpoint is deprecated!'
+                });
+            } else {
+                return res.status(401).json({
+                    success: false,
+                    error: 'Invalid legacy credentials'
+                });
+            }
+        }
 
         if (!user || user.password !== password) {
             return res.status(401).json({
