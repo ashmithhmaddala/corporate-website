@@ -513,6 +513,7 @@ app.put('/api/profile', authenticate, (req, res) => {
 });
 
 // Upload profile picture
+
 app.post('/api/profile/picture', authenticate, upload.single('profilePicture'), (req, res) => {
     try {
         if (!req.file) {
@@ -545,6 +546,7 @@ app.post('/api/profile/picture', authenticate, upload.single('profilePicture'), 
         res.status(500).json({ success: false, error: 'Failed to upload profile picture' });
     }
 });
+
 
 // Change password (new endpoint for profile page)
 app.put('/api/profile/password', authenticate, (req, res) => {
