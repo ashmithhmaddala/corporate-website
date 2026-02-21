@@ -411,5 +411,72 @@
         Error: User 'Guest' does not have permission to click this button.
     </p>
 </div>
+
+
+<script>
+let keys = "";
+
+// 1. Create the 'Shake' animation style
+const style = document.createElement('style');
+style.innerHTML = `
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        20% { transform: translate(-3px, 0px) rotate(1deg); }
+        40% { transform: translate(3px, 2px) rotate(-1deg); }
+        60% { transform: translate(-3px, 1px) rotate(0deg); }
+        80% { transform: translate(-1px, -1px) rotate(1deg); }
+        100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+    .glitch-mode {
+        animation: shake 0.2s infinite;
+        filter: invert(1) hue-rotate(90deg);
+        overflow: hidden;
+    }
+`;
+document.head.appendChild(style);
+
+// 2. The Keyboard Listener
+window.addEventListener('keydown', (e) => {
+    keys += e.key.toLowerCase();
+    
+    // If user types 'hack'
+    if (keys.endsWith("hack")) {
+        document.body.classList.add('glitch-mode');
+
+        // Show flag after 1 second of shaking
+        setTimeout(() => {
+            document.body.innerHTML = `
+                <div style="background:black; color:lime; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:monospace; text-align:center;">
+                    <h1 style="font-size:3rem;">⚡ CORE BYPASS SUCCESS ⚡</h1>
+                    <div style="border:2px dashed lime; padding:20px; margin: 20px;">
+                        <h2 style="color:white;">FLAG{SYST3M_GL1TCH_2026}</h2>
+                    </div>
+                    <button onclick="location.reload()" style="color:lime; background:transparent; border:1px solid lime; padding:10px; cursor:pointer;">REBOOT SYSTEM</button>
+                </div>
+            `;
+        }, 1000);
+    }
+    
+    // Keep the string short so it doesn't eat memory
+    if (keys.length > 10) keys = keys.substring(5);
+});
+</script>
+<script>
+    // This listens for when the user switches tabs or minimizes the window
+    window.addEventListener('blur', () => {
+        // Change the tab text to the flag
+        document.title = "🚩 FLAG{TAB_HACKER_2026}";
+        
+        // Optional: Change the favicon to a skull or lock to make it pop
+        let link = document.querySelector("link[rel~='icon']");
+        if (link) link.href = 'https://cdn-icons-png.flaticon.com/512/0/622.png';
+    });
+
+    // This resets the title when they come back
+    window.addEventListener('focus', () => {
+        document.title = "The Vault - Secure Login";
+    });
+</script>
+
 </body>
 </html>
