@@ -396,44 +396,7 @@
 
     <script src="script.js"></script>
 
-
-<style>
-  /* The Container - invisible normally */
-  .secret-zone {
-    margin: 20px auto;
-    padding: 10px;
-    width: 200px;
-    height: 50px;
-    color: transparent; /* Makes text invisible */
-    background: transparent;
-    border: 1px solid transparent;
-    transition: all 0.2s;
-    user-select: all; /* Encourages selection */
-    cursor: default;
-  }
-
-  /* When the user highlights/selects the text inside */
-  .secret-zone::selection {
-    background: #ff00ff; /* Bright Magenta */
-    color: #fff;         /* White text */
-    text-shadow: 2px 2px #000;
-  }
-
-  /* Make the text inside HUGE when selected */
-  .secret-zone b::selection {
-    font-size: 50px;     /* Makes the font massive when highlighted */
-  }
-</style>
-
-<div style="text-align: center; padding: 50px;">
-    <h3>Challenge: Hidden in Plain Sight</h3>
-    <p>Nothing here... unless you look closer.</p>
-
-    <!-- The secret area -->
-    <div class="secret-zone" onclick="alert('FLAG{OBSERVANT_KING}')">
-        <b> ?FLAG?!! </b>
-    </div>
-</div>
+    
 
 <div style="text-align: center; margin-top: 50px; border: 2px solid #333; padding: 20px;">
     <h3>Admin Control Panel</h3>
