@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrations · Vault</title>
+    <meta name="description" content="Connect Vault to your existing tools. Sync secrets to Vercel, AWS, GitHub, and more.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="wordmark">vault</a>
+            <div class="nav-center" id="nav-menu">
+                <a href="features.html">Features</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="integrations.html" class="active">Integrations</a>
+                <a href="docs.html">Docs</a>
+            </div>
+            <div class="nav-end">
+                <button class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <a href="login.html" class="nav-signin">Sign in</a>
+                <a href="login.html" class="btn-nav">Get started</a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <span class="label">Integrations</span>
+            <h1>Works with the tools<br>you already use.</h1>
+            <p class="page-hero-sub">Sync secrets automatically to your deployment platforms, CI/CD pipelines, and cloud providers. No more manual copy-pasting.</p>
+        </section>
+
+        <section class="integrations-grid">
+            <div class="integration-card">
+                <div class="integration-logo">▲</div>
+                <h3>Vercel</h3>
+                <p>Automatically sync environment variables to your Vercel projects. Changes deploy instantly.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </div>
+                <h3>GitHub Actions</h3>
+                <p>Inject secrets into your CI/CD workflows. Supports repository and organization-level sync.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#FF9900">
+                        <path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183 0 .08-.048.16-.152.24l-.503.335a.383.383 0 0 1-.208.072c-.08 0-.16-.04-.239-.112a2.47 2.47 0 0 1-.287-.375 6.18 6.18 0 0 1-.248-.471c-.622.734-1.405 1.101-2.347 1.101-.67 0-1.205-.191-1.596-.574-.391-.384-.59-.894-.59-1.533 0-.678.239-1.23.726-1.644.487-.415 1.133-.623 1.955-.623.272 0 .551.024.846.064.296.04.6.104.918.176v-.583c0-.607-.127-1.03-.375-1.277-.255-.248-.686-.367-1.3-.367-.28 0-.568.031-.863.103-.295.072-.583.16-.862.272a2.1 2.1 0 0 1-.255.104.488.488 0 0 1-.127.023c-.112 0-.168-.08-.168-.247v-.391c0-.128.016-.224.056-.28a.597.597 0 0 1 .224-.167c.279-.144.614-.264 1.005-.36a4.84 4.84 0 0 1 1.246-.151c.95 0 1.644.216 2.091.647.439.43.662 1.085.662 1.963v2.586zm-3.24 1.214c.263 0 .534-.048.822-.144.287-.096.543-.271.758-.51.128-.152.224-.32.272-.512.047-.191.08-.423.08-.694v-.335a6.66 6.66 0 0 0-.735-.136 6.02 6.02 0 0 0-.75-.048c-.535 0-.926.104-1.19.32-.263.215-.39.518-.39.917 0 .375.095.655.295.846.191.2.47.296.838.296zm6.41.862c-.144 0-.24-.024-.304-.08-.064-.048-.12-.16-.168-.311L7.586 5.55a1.398 1.398 0 0 1-.072-.32c0-.128.064-.2.191-.2h.783c.151 0 .255.025.31.08.065.048.113.16.16.312l1.342 5.284 1.245-5.284c.04-.16.088-.264.151-.312a.549.549 0 0 1 .32-.08h.638c.152 0 .256.025.32.08.063.048.12.16.151.312l1.261 5.348 1.381-5.348c.048-.16.104-.264.16-.312a.52.52 0 0 1 .311-.08h.743c.127 0 .2.065.2.2 0 .04-.009.08-.017.128a1.137 1.137 0 0 1-.056.2l-1.923 6.17c-.048.16-.104.263-.168.311a.51.51 0 0 1-.303.08h-.687c-.151 0-.255-.024-.32-.08-.063-.056-.119-.16-.15-.32l-1.238-5.148-1.23 5.14c-.04.16-.087.264-.15.32-.065.056-.177.08-.32.08zm10.256.215c-.415 0-.83-.048-1.229-.143-.399-.096-.71-.2-.918-.32-.128-.071-.215-.151-.247-.223a.563.563 0 0 1-.048-.224v-.407c0-.167.064-.247.183-.247.048 0 .096.008.144.024.048.016.12.048.2.08.271.12.566.215.878.279.319.064.63.096.95.096.502 0 .894-.088 1.165-.264a.86.86 0 0 0 .415-.758.777.777 0 0 0-.215-.559c-.144-.151-.416-.287-.807-.415l-1.157-.36c-.583-.183-1.014-.454-1.277-.813a1.902 1.902 0 0 1-.4-1.158c0-.335.073-.63.216-.886.144-.255.335-.479.575-.654.24-.184.51-.32.83-.415.32-.096.655-.136 1.006-.136.176 0 .359.008.535.032.183.024.35.056.518.088.16.04.312.08.455.127.144.048.256.096.336.144a.69.69 0 0 1 .24.2.43.43 0 0 1 .071.263v.375c0 .168-.064.256-.184.256a.83.83 0 0 1-.303-.096 3.652 3.652 0 0 0-1.532-.311c-.455 0-.815.071-1.062.223-.248.152-.375.383-.375.71 0 .224.08.416.24.567.159.152.454.304.877.44l1.134.358c.574.184.99.44 1.237.767.247.327.367.702.367 1.117 0 .343-.072.655-.207.926-.144.272-.336.511-.583.703-.248.2-.543.343-.886.447-.36.111-.734.167-1.142.167z"/>
+                    </svg>
+                </div>
+                <h3>AWS</h3>
+                <p>Sync to AWS Secrets Manager, Parameter Store, or Lambda environment variables.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185zm-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.186zm0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186zm-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186zm-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186zm5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185zm-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185zm-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.185-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185zm-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.185.185v1.888c0 .102.084.185.185.185zM23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288z"/>
+                    </svg>
+                </div>
+                <h3>Docker</h3>
+                <p>Inject secrets at container runtime. Works with Docker Compose and Kubernetes.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10.204 14.35l.007.01-.999 2.413a5.171 5.171 0 01-2.075-2.597l2.578-.437.004.005a.44.44 0 01.485.606zm-.833-2.129a.44.44 0 00.173-.756l.002-.011L7.585 9.7a5.143 5.143 0 00-.73 3.255l2.514-.725.002-.009zm1.145-1.98a.44.44 0 00.699-.337l-.01-.009.539-2.624a5.153 5.153 0 00-2.88 1.61l2.646 1.355.006.005zm2.369-.036l-.007-.005 1.577-2.078a5.153 5.153 0 00-3.086-.986l.502 2.627.005.01a.44.44 0 00.701.334l.308-.902zm1.878 1.648l-.007.007-1.91 1.649a.44.44 0 00.173.757l.009.009 2.514.725a5.143 5.143 0 00-.73-3.255l-.049.108zm-.674 3.326a.44.44 0 00.485-.607l.004-.004 2.578.437a5.171 5.171 0 01-2.075 2.597l-.999-2.413.007-.01zm-3.335 1.002h-.01l-1.372 2.197a5.136 5.136 0 001.997.398 5.136 5.136 0 001.997-.398l-1.372-2.197h-.01a.44.44 0 00-.615 0l-.615.415zm4.326-7.443l.013.007.013-.007a6.21 6.21 0 00-2.461-1.908 6.175 6.175 0 00-3.192-.557 6.21 6.21 0 00-2.87 1.11 6.21 6.21 0 00-1.958 2.442A6.175 6.175 0 004.4 12.12a6.21 6.21 0 001.11 2.87 6.21 6.21 0 002.442 1.958 6.175 6.175 0 003.192.557 6.21 6.21 0 002.87-1.11 6.21 6.21 0 001.958-2.442A6.175 6.175 0 0019.6 12.12a6.21 6.21 0 00-1.11-2.87 6.21 6.21 0 00-1.835-1.52zM12 16.96a4.96 4.96 0 110-9.92 4.96 4.96 0 010 9.92z"/>
+                    </svg>
+                </div>
+                <h3>Kubernetes</h3>
+                <p>Native secrets sync to K8s clusters. Supports Helm charts and custom operators.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#FC6D26">
+                        <path d="M4.845.904c-.435 0-.82.28-.955.692C2.639 5.449 1.246 9.728.07 13.335a1.437 1.437 0 00.522 1.607l11.071 8.045c.2.145.472.144.67-.004l11.073-8.04a1.436 1.436 0 00.522-1.61c-1.285-3.942-2.683-8.256-3.817-11.746a1.004 1.004 0 00-.957-.684.987.987 0 00-.949.69l-2.405 7.408H8.203l-2.41-7.408a.987.987 0 00-.942-.69h-.006z"/>
+                    </svg>
+                </div>
+                <h3>GitLab CI</h3>
+                <p>Sync secrets to GitLab CI/CD variables. Works with groups and projects.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#00C7B7">
+                        <path d="M16.934 8.519a1.044 1.044 0 01.303.23l2.349-1.045-2.192-2.171-.491 2.954zM12.06 6.546a1.305 1.305 0 01.209.574l3.497 1.482a1.044 1.044 0 01.366-.325l.535-3.217-4.607 1.486zm-3.973 3.973l2.747-2.747-.143-.143-.57-.57-1.73 1.71-.009.009.002.007-.597.527-.009.008-.007.011-.003-.002-3.162 2.793 2.044.426a.57.57 0 01-.007-.062 1.033 1.033 0 011.002-1.063c.088-.004.174.004.259.022l.04-.74.143-.2zm1.143 2.095l.143.143.143-.143.009-.009-.009-.022c-.056-.143-.085-.3-.084-.457a1.033 1.033 0 011.002-1.062 1.033 1.033 0 011.062 1.002c.004.088-.004.175-.022.26l.698.036.176.128.296-.271-.074-.478a1.045 1.045 0 01-.325-.367l-3.497-1.482a1.305 1.305 0 01-.574.209l-.283 1.91.339.603zm9.397-5.395l2.349 2.326.117-.108 1.063-4.921-3.529 2.703zm-5.012 8.64l3.24-.619 1.088-.207.037-.176a1.305 1.305 0 01-.074-.26l-1.174-.061-.14-.098a1.033 1.033 0 01-.365.308l-.183 1.113zm6.12-3.76l-.898 4.16 1.974-1.94-1.076-2.22zm-10.834 5.05l3.529.738.164-.178a1.033 1.033 0 01-.16-.549c0-.027.002-.053.004-.08l-1.938-.405-.2-.143-.247.202-.296.271.143.143.001.001zm5.099-4.591a1.033 1.033 0 01-.222.325l.176 1.13.093.067.909-.174-.143-.143a1.032 1.032 0 01-.143-.765l-.67-.44zm-3.529 2.703a1.044 1.044 0 01-.575-.209l-1.913.893 3.529 1.486-.209-1.574-.832-.596zm8.418-1.556l-2.703.519.296.27.143.143.009-.008a1.033 1.033 0 01-.084-.405c0-.027.001-.053.004-.08l-.575-.44 2.91 2.907v-.003l2.349-1.045-2.349-1.858zm-2.043-1.199a1.033 1.033 0 01.143-.524l-.176-1.13-.093-.067-.48.093a1.033 1.033 0 01-.234.26l.143.143.697 1.225zm-4.091-.893l-.296-.27-.143-.143-.009.008a1.033 1.033 0 01.084.405l-.004.08.575.44-2.91-2.907v.003l-2.349 1.045 2.349 1.858 2.703-.519zm-7.529-1.063l2.349.466.466-2.349-2.815 1.883zm14.117 3.529l-1.045-2.088-1.063.204.084.013.143.143-.143.143-.696 1.226a1.033 1.033 0 01.143.765l.67.44a1.033 1.033 0 01.764-.455l.143-.391zm-12.233 2.394l3.529-.738-.143-.143-.009-.009.008-.022c.056-.143.085-.3.084-.457l-1.174.062-.14.097a1.032 1.032 0 01-.365-.309l-.732-.043-.259.146-.799.416v1.0z"/>
+                    </svg>
+                </div>
+                <h3>Netlify</h3>
+                <p>Push environment variables to your Netlify sites. Deploy triggers included.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M.113 10.27A12.375 12.375 0 000 12c0 .693.057 1.373.166 2.037l.014.063c.052.263.139.694.139.694l23.485-4.533s-.093-.4-.152-.643l-.014-.058A12.405 12.405 0 0023.5 8l-23.387 2.27zm.166 3.837l23.22 4.483.001-.008.103.043a12.05 12.05 0 01-.57 1.4l-23.262.004c-.204-.448-.38-.913-.527-1.393l.98-.189.055.34zm1.089 2.792l20.91.002a11.92 11.92 0 01-1.045 1.5H2.32a11.92 11.92 0 01-.952-1.502zm1.528 2.145h18.208c-.399.42-.828.812-1.284 1.172H4.18c-.456-.36-.885-.752-1.284-1.172zM5.37 20.29h13.26a11.876 11.876 0 01-4.63.925c-1.686 0-3.28-.35-4.731-.98l-.12-.05c-.603-.276-1.18-.598-1.725-.958l-.054.063zm.116-11.037L.166 9.961l-.022.039a12.318 12.318 0 01.46-1.92l23.394-.005c.206.63.365 1.278.474 1.942l.02.103L5.486 9.253zm-.368-2.598l17.822.001c-.404-.494-.852-.947-1.334-1.357H6.394c-.482.41-.93.863-1.334 1.357h.058v-.001zm1.893-2.02h9.978a11.877 11.877 0 00-4.92-1.066c-1.768 0-3.44.388-4.945 1.082l-.113-.016zm1.4-1.672a12.43 12.43 0 013.59-.53c1.343 0 2.633.213 3.844.607H8.412v-.077z"/>
+                    </svg>
+                </div>
+                <h3>Railway</h3>
+                <p>Sync secrets to Railway services and environments automatically.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#F38020">
+                        <path d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 01-.1333-.0713.1585.1585 0 01-.0068-.1454.1612.1612 0 01.1255-.1055c.0108-.0014 8.6747-.1113 8.7095-.1123 1.0351-.0498 2.1471-.8965 2.4995-1.9073l.4532-1.2944a.2193.2193 0 00.0088-.0762c0-.016-.0017-.0316-.0052-.0464a5.3872 5.3872 0 00-5.2588-4.093c-2.3698 0-4.3993 1.5205-5.1403 3.6367-.4711-.3467-1.0847-.5205-1.7305-.4541-1.1699.119-2.1084 1.0615-2.2031 2.2354-.0234.2812-.0088.5557.0411.8125C1.5806 13.9951 0 15.5928 0 17.5618c0 .1094.0088.2168.0147.3242.0098.1631.1514.2939.3164.2939h15.3604c.1503 0 .2822-.1074.3115-.2598l.5058-1.8754zM19.5058 9.5615c-.0411 0-.0791.0176-.1084.0469a.1558.1558 0 00-.0449.1094 3.1847 3.1847 0 01-.117 1.0039c-.2393.8086-.8867 1.4482-1.686 1.6582l-.8691.2285a.1535.1535 0 00-.086.0547.1481.1481 0 00-.0332.0996c-.0019.1163.0762.2227.1924.2617.0068.002.8457.2129.8545.2168.8291.2305 1.4746.8691 1.7129 1.6934.0781.2715.1152.5605.1152.8613 0 .0411.0166.0801.0459.1094.0293.0293.0684.0459.1075.0459h2.9501c.1953 0 .3643-.1493.3828-.3457.0205-.2061.0293-.4102.0293-.6172 0-2.838-2.3008-5.1387-5.1387-5.1387l.293-.0469z"/>
+                    </svg>
+                </div>
+                <h3>Cloudflare Workers</h3>
+                <p>Push secrets to Cloudflare Workers and Pages environment variables.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#0078D4">
+                        <path d="M5.483 21.3H24L14.025 4.013l-3.038 8.347 5.836 6.938L5.483 21.3zM13.23 2.7L6.105 8.677 0 19.253h5.505v.014L13.23 2.7z"/>
+                    </svg>
+                </div>
+                <h3>Azure</h3>
+                <p>Sync to Azure Key Vault, App Configuration, and Azure Functions.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#4285F4">
+                        <path d="M12.19 5.006c2.1-.001 4.143.723 5.747 2.05l2.728-2.728A11.985 11.985 0 0012.19 1.5C7.276 1.5 3.088 4.468 1.342 8.684l3.188 2.477A7.065 7.065 0 0112.19 5.006z"/>
+                        <path fill="#34A853" d="M5.006 12.19c0-.645.09-1.27.254-1.863L2.07 7.85A11.94 11.94 0 00.5 12.19c0 1.594.312 3.116.877 4.51l3.188-2.477a7.015 7.015 0 01-.559-2.033z"/>
+                        <path fill="#FBBC04" d="M12.19 19.374a7.066 7.066 0 01-6.625-4.552L2.377 17.3c1.747 4.218 5.935 7.19 10.813 7.19 2.79 0 5.422-.957 7.47-2.655l-3.032-2.356a7.018 7.018 0 01-5.438 1.895z"/>
+                        <path fill="#EA4335" d="M22.5 12.19c0-.82-.076-1.636-.223-2.428H12.19v4.61h5.787a5.009 5.009 0 01-2.145 3.243l3.032 2.356c1.857-1.72 2.936-4.4 2.936-7.78z"/>
+                    </svg>
+                </div>
+                <h3>Google Cloud</h3>
+                <p>Sync to Google Secret Manager, Cloud Run, and Cloud Functions.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+            
+            <div class="integration-card">
+                <div class="integration-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#7B42BC">
+                        <path d="M8.283 3.293v6.072l5.295 3.056V6.349L8.283 3.293zm5.997 9.826l5.295-3.056V3.991l-5.295 3.057v6.07zm-6.698 3.99l5.295 3.056V14.09l-5.295-3.056v6.072zm-6.882-9.868v6.072l5.295 3.056V10.3l-5.295-3.06z"/>
+                    </svg>
+                </div>
+                <h3>Terraform</h3>
+                <p>Manage secrets as infrastructure. Full Terraform provider support.</p>
+                <a href="#" class="integration-link">
+                    View documentation
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <section class="feature-deep-dive">
+            <div class="deep-dive-content">
+                <span class="label">Request an integration</span>
+                <h2>Don't see what you need?</h2>
+                <p>We're constantly adding new integrations based on customer requests. Let us know what tools you're using and we'll prioritize accordingly.</p>
+                <a href="contact.html" class="btn-secondary" style="margin-top: 1rem;">Request integration</a>
+            </div>
+        </section>
+
+        <section class="final-cta">
+            <h2>Ready to connect your stack?</h2>
+            <p>Start free. No credit card required.</p>
+            <a href="login.html" class="btn-primary btn-lg">Get started</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="index.html" class="wordmark">vault</a>
+                <p>Secrets infrastructure for<br>modern engineering teams.</p>
+            </div>
+            <nav class="footer-nav">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="integrations.html">Integrations</a>
+                    <a href="changelog.html">Changelog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="docs.html">Documentation</a>
+                    <a href="api.html">API Reference</a>
+                    <a href="status.html">Status</a>
+                    <a href="security.html">Security</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="careers.html">Careers</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Vault Technologies, Inc.</span>
+            <div class="legal">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

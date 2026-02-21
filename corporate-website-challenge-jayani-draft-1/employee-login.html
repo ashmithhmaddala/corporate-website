@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Login · Vault</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="auth.css">
+    <style>
+        .auth-wrapper {
+            grid-template-columns: 1fr;
+        }
+        
+        .auth-main {
+            background: var(--bg);
+        }
+        
+        .auth-back {
+            position: fixed;
+            top: 1.5rem;
+            left: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            transition: color 0.15s;
+        }
+        
+        .auth-back:hover {
+            color: var(--text);
+        }
+        
+        .auth-back svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .auth-logo .wordmark {
+            margin-bottom: 0;
+        }
+        
+        .auth-container {
+            max-width: 340px;
+        }
+        
+        .auth-header {
+            text-align: center;
+        }
+        
+        .badge-internal {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.6875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.625rem;
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 100px;
+            margin-bottom: 1rem;
+        }
+        
+        .badge-internal svg {
+            width: 12px;
+            height: 12px;
+        }
+        
+        .security-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+        
+        .security-note svg {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            color: var(--text-muted);
+        }
+        
+        .security-note p {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <a href="index.html" class="auth-back">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/>
+        </svg>
+        Back to home
+    </a>
+    
+    <main class="auth-main">
+        <div class="auth-container">
+            <div class="auth-logo">
+                <a href="index.html" class="wordmark">vault</a>
+            </div>
+            
+            <header class="auth-header">
+                <span class="badge-internal">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+                    </svg>
+                    Internal
+                </span>
+                <h1>Team access</h1>
+                <p>Sign in with your Vault team credentials</p>
+            </header>
+            
+            <form class="auth-form" id="employeeLoginForm" style="margin-top: 2rem;">
+                <div class="field">
+                    <label for="email">Work email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="you@vault.dev"
+                        autocomplete="email"
+                        required
+                    >
+                </div>
+                
+                <div class="field">
+                    <div class="field-header">
+                        <label for="password">Password</label>
+                        <a href="#" class="field-link">Reset password</a>
+                    </div>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="btn-primary">Sign in</button>
+            </form>
+            
+            <div class="security-note">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+                </svg>
+                <p>This portal is for Vault team members only. All access attempts are logged and monitored.</p>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.getElementById('employeeLoginForm')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = e.target.querySelector('button[type="submit"]');
+            
+            btn.textContent = 'Signing in...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    // VULN: Redirect based on role from response (trusting client-side data)
+                    if (data.user.role === 'admin' || data.user.role === 'superadmin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    // VULN: Verbose error message tells user exactly what's wrong
+                    alert(data.error || 'Login failed');
+                    btn.textContent = 'Sign in';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                alert('Connection error: ' + err.message);
+                btn.textContent = 'Sign in';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

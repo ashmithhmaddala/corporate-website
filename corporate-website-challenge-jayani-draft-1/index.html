@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault · Secrets Infrastructure</title>
+    <meta name="description" content="Infrastructure for managing secrets at scale. Used by teams shipping to production.">
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vault.dev/">
+    <meta property="og:title" content="Vault · Secrets Infrastructure">
+    <meta property="og:description" content="Infrastructure for managing secrets at scale. Used by teams shipping to production.">
+    <meta property="og:image" content="https://vault.dev/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vault · Secrets Infrastructure">
+    <meta name="twitter:description" content="Infrastructure for managing secrets at scale. Used by teams shipping to production.">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <div class="noise"></div>
+    
+    <header class="header" role="banner">
+        <nav class="nav" aria-label="Main navigation">
+            <a href="/" class="wordmark" aria-label="Vault home">vault</a>
+            <div class="nav-center" id="nav-menu">
+                <a href="#how">How it works</a>
+                <a href="#customers">Customers</a>
+                <a href="#pricing">Pricing</a>
+                <a href="docs.html">Docs</a>
+            </div>
+            <div class="nav-end">
+                <button class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <a href="login.html" class="nav-signin">Sign in</a>
+                <a href="login.html" class="btn-nav">Get started</a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="hero-announce">
+                <span class="tag">New</span>
+                Native Kubernetes secrets sync is here
+            </div>
+            <h1 id="hero-heading">The last place your<br>secrets will ever live.</h1>
+            <p class="hero-sub">Stop sharing credentials over Slack. Vault gives your team one secure source of truth for every API key, token, and certificate your stack depends on.</p>
+            <div class="hero-cta">
+                <a href="login.html" class="btn-primary">Start building</a>
+                <a href="#how" class="btn-secondary">See how it works</a>
+            </div>
+        </section>
+
+        <section class="demo">
+            <div class="window">
+                <div class="window-bar">
+                    <div class="dots"><i></i><i></i><i></i></div>
+                    <span class="url" id="demo-url">vault.dev/acme/production</span>
+                </div>
+                <div class="window-body">
+                    <aside class="sidebar">
+                        <div class="env active" data-env="production">
+                            <span class="env-dot"></span>
+                            Production
+                        </div>
+                        <div class="env" data-env="staging">
+                            <span class="env-dot staging"></span>
+                            Staging
+                        </div>
+                        <div class="env" data-env="development">
+                            <span class="env-dot dev"></span>
+                            Development
+                        </div>
+                    </aside>
+                    <div class="main-panel">
+                        <header class="panel-header">
+                            <h3 id="env-title">Production</h3>
+                            <span class="count" id="env-count">12 secrets</span>
+                        </header>
+                        
+                        <!-- Production Secrets -->
+                        <div class="secrets-list" id="secrets-production">
+                            <div class="secret">
+                                <span class="key">DATABASE_URL</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 2h ago</span>
+                            </div>
+                            <div class="secret">
+                                <span class="key">STRIPE_SECRET_KEY</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 1d ago</span>
+                            </div>
+                            <div class="secret">
+                                <span class="key">AWS_ACCESS_KEY_ID</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 3d ago</span>
+                            </div>
+                            <div class="secret muted">
+                                <span class="key">SENDGRID_API_KEY</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 1w ago</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Staging Secrets -->
+                        <div class="secrets-list" id="secrets-staging" style="display: none;">
+                            <div class="secret">
+                                <span class="key">DATABASE_URL</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 4h ago</span>
+                            </div>
+                            <div class="secret">
+                                <span class="key">STRIPE_TEST_KEY</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 6h ago</span>
+                            </div>
+                            <div class="secret">
+                                <span class="key">DEBUG_MODE</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 2d ago</span>
+                            </div>
+                            <div class="secret">
+                                <span class="key">LOG_LEVEL</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 2d ago</span>
+                            </div>
+                            <div class="secret muted">
+                                <span class="key">SENTRY_DSN</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 5d ago</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Development Secrets -->
+                        <div class="secrets-list" id="secrets-development" style="display: none;">
+                            <div class="secret">
+                                <span class="key">DATABASE_URL</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 1h ago</span>
+                            </div>
+                            <div class="secret">
+                                <span class="key">API_MOCK_ENABLED</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 3h ago</span>
+                            </div>
+                            <div class="secret">
+                                <span class="key">HOT_RELOAD</span>
+                                <span class="val">••••••••••••••••••••</span>
+                                <span class="meta">Updated 1d ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="logos">
+            <span class="logos-label">Powering secrets at</span>
+            <div class="logo-marquee">
+                <div class="logo-track">
+                    <span>Vercel</span>
+                    <span>Linear</span>
+                    <span>Stripe</span>
+                    <span>Shopify</span>
+                    <span>Netflix</span>
+                    <span>Spotify</span>
+                    <span>Airbnb</span>
+                    <span>Slack</span>
+                    <span>Discord</span>
+                    <span>Notion</span>
+                    <span>Figma</span>
+                    <span>GitHub</span>
+                    <span>GitLab</span>
+                    <span>Twilio</span>
+                    <span>Datadog</span>
+                    <span>Cloudflare</span>
+                    <!-- Duplicate for seamless loop -->
+                    <span>Vercel</span>
+                    <span>Linear</span>
+                    <span>Stripe</span>
+                    <span>Shopify</span>
+                    <span>Netflix</span>
+                    <span>Spotify</span>
+                    <span>Airbnb</span>
+                    <span>Slack</span>
+                    <span>Discord</span>
+                    <span>Notion</span>
+                    <span>Figma</span>
+                    <span>GitHub</span>
+                    <span>GitLab</span>
+                    <span>Twilio</span>
+                    <span>Datadog</span>
+                    <span>Cloudflare</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="problem-section">
+            <div class="problem-box">
+                <span class="label">The problem</span>
+                <h2>Secrets end up everywhere except where they should be.</h2>
+                <p>Slack threads. Notion docs. .env files that haven't been rotated in months. Shared password vaults with no audit trail. When someone leaves, you're never 100% sure what they still have access to.</p>
+            </div>
+        </section>
+
+        <section class="solution-section" id="how">
+            <span class="label">How Vault works</span>
+            <h2>One source of truth for your team's secrets.</h2>
+            <div class="solutions">
+                <article class="sol-card">
+                    <span class="sol-num">01</span>
+                    <h3>Centralized by default</h3>
+                    <p>Every secret your team needs lives in Vault. Database URLs, API keys, certificates – encrypted at rest with AES-256.</p>
+                </article>
+                <article class="sol-card">
+                    <span class="sol-num">02</span>
+                    <h3>Access that makes sense</h3>
+                    <p>Control who sees what at the environment level. Juniors get development. Seniors get production. Revoke instantly when someone leaves.</p>
+                </article>
+                <article class="sol-card">
+                    <span class="sol-num">03</span>
+                    <h3>Sync anywhere</h3>
+                    <p>Pull secrets with our CLI. Sync to Vercel, AWS, or GitHub Actions automatically. No more copy-pasting from a shared doc.</p>
+                </article>
+                <article class="sol-card">
+                    <span class="sol-num">04</span>
+                    <h3>Complete audit trail</h3>
+                    <p>Every access logged. Every change tracked. When compliance asks who touched production secrets last Tuesday, you'll know.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="cli-section">
+            <div class="cli-text">
+                <span class="label">Developer experience</span>
+                <h2>Feels like env vars.<br>Works like infrastructure.</h2>
+                <p>Our CLI injects secrets at runtime. Your .env files stay empty. Your git history stays clean. Your security team stays happy.</p>
+            </div>
+            <div class="terminal">
+                <div class="term-bar">
+                    <span>Terminal</span>
+                </div>
+                <div class="term-body">
+                    <p><span class="prompt">~</span> vault login</p>
+                    <p class="dim">Authenticated as jamie@acme.com</p>
+                    <p><span class="prompt">~</span> vault run --env production npm start</p>
+                    <p class="dim">→ Injecting 12 secrets...</p>
+                    <p class="dim">→ Server running at localhost:3000</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials" id="customers">
+            <span class="label">What teams are saying</span>
+            <div class="quotes">
+                <blockquote class="quote-card">
+                    <p>"We migrated from a shared 1Password vault in under an hour. Onboarding new engineers went from 2 hours to 5 minutes."</p>
+                    <footer>
+                        <strong>Alex Rivera</strong>
+                        <span>Engineering Lead at Campfire</span>
+                    </footer>
+                </blockquote>
+                <blockquote class="quote-card">
+                    <p>"Finally passed our SOC 2 audit without scrambling to document who had access to what. The audit trail alone is worth it."</p>
+                    <footer>
+                        <strong>Morgan Chen</strong>
+                        <span>CTO at Stackline</span>
+                    </footer>
+                </blockquote>
+            </div>
+        </section>
+
+        <section class="pricing-section" id="pricing">
+            <span class="label">Pricing</span>
+            <h2>Start free. Scale when ready.</h2>
+            <div class="plans">
+                <div class="plan">
+                    <h3>Starter</h3>
+                    <p class="plan-price">$0</p>
+                    <p class="plan-desc">For small teams getting started</p>
+                    <ul>
+                        <li>Up to 5 team members</li>
+                        <li>3 projects</li>
+                        <li>7-day audit history</li>
+                        <li>CLI + web access</li>
+                    </ul>
+                    <a href="login.html" class="btn-secondary">Start free</a>
+                </div>
+                <div class="plan featured">
+                    <span class="plan-badge">Popular</span>
+                    <h3>Team</h3>
+                    <p class="plan-price">$15<span>/user/mo</span></p>
+                    <p class="plan-desc">For growing engineering teams</p>
+                    <ul>
+                        <li>Unlimited members</li>
+                        <li>Unlimited projects</li>
+                        <li>1-year audit history</li>
+                        <li>SSO & SAML</li>
+                        <li>Vercel, AWS, GitHub sync</li>
+                    </ul>
+                    <a href="login.html" class="btn-primary">Start trial</a>
+                </div>
+                <div class="plan">
+                    <h3>Enterprise</h3>
+                    <p class="plan-price">Custom</p>
+                    <p class="plan-desc">For orgs with specific needs</p>
+                    <ul>
+                        <li>Everything in Team</li>
+                        <li>Unlimited audit history</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated support & SLA</li>
+                    </ul>
+                    <a href="#" class="btn-secondary">Contact sales</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="final-cta">
+            <h2>Your secrets deserve better than a Slack message.</h2>
+            <p>Start free. No credit card required.</p>
+            <a href="login.html" class="btn-primary btn-lg">Create your vault</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="index.html" class="wordmark">vault</a>
+                <p>Secrets infrastructure for<br>modern engineering teams.</p>
+            </div>
+            <nav class="footer-nav">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="integrations.html">Integrations</a>
+                    <a href="changelog.html">Changelog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="docs.html">Documentation</a>
+                    <a href="api.html">API Reference</a>
+                    <a href="status.html">Status</a>
+                    <a href="security.html">Security</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="careers.html">Careers</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Vault Technologies, Inc.</span>
+            <div class="legal">
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent -->
+    <div class="cookie-banner" id="cookie-banner" role="dialog" aria-label="Cookie consent">
+        <div class="cookie-content">
+            <p>We use cookies to improve your experience. By continuing, you agree to our <a href="#">Privacy Policy</a>.</p>
+            <div class="cookie-actions">
+                <button class="cookie-btn cookie-decline">Decline</button>
+                <button class="cookie-btn cookie-accept">Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

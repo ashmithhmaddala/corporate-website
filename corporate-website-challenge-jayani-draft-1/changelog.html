@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Changelog · Vault</title>
+    <meta name="description" content="See what's new in Vault. Product updates, new features, and improvements.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="wordmark">vault</a>
+            <div class="nav-center" id="nav-menu">
+                <a href="features.html">Features</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="integrations.html">Integrations</a>
+                <a href="docs.html">Docs</a>
+            </div>
+            <div class="nav-end">
+                <button class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <a href="login.html" class="nav-signin">Sign in</a>
+                <a href="login.html" class="btn-nav">Get started</a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="page-hero">
+            <span class="label">Changelog</span>
+            <h1>What's new in Vault</h1>
+            <p class="page-hero-sub">Product updates, new features, and improvements. Subscribe to get notified when we ship something new.</p>
+        </section>
+
+        <section class="changelog-container">
+            <article class="changelog-entry">
+                <span class="changelog-date">January 30, 2026</span>
+                <h3>Native Kubernetes Secrets Sync</h3>
+                <p>Sync your Vault secrets directly to Kubernetes clusters. Our new operator watches for changes and updates K8s secrets automatically—no more manual kubectl apply.</p>
+                <p>Supports namespaced secrets, configmaps, and works with Helm charts out of the box.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag new">New</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">January 22, 2026</span>
+                <h3>Improved Audit Log Filtering</h3>
+                <p>Filter audit logs by user, action type, environment, and date range. Export filtered results to CSV for compliance reporting. Added full-text search across log entries.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag improved">Improved</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">January 15, 2026</span>
+                <h3>CLI v2.4.0</h3>
+                <p>New <code>vault diff</code> command to compare secrets between environments. Improved <code>vault run</code> performance with parallel secret fetching. Fixed an issue where the CLI would hang on Windows when using Git Bash.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag new">New</span>
+                    <span class="changelog-tag fixed">Fixed</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">January 8, 2026</span>
+                <h3>Secret Comments</h3>
+                <p>Add comments to individual secrets to document what they're for, where they came from, or when they should be rotated. Comments are searchable and visible to all team members with access.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag new">New</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">December 18, 2025</span>
+                <h3>Railway Integration</h3>
+                <p>Sync secrets to Railway services and environments. Changes push automatically when you update secrets in Vault. Supports all Railway service types including databases and cron jobs.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag new">New</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">December 10, 2025</span>
+                <h3>Personal Access Tokens</h3>
+                <p>Generate scoped personal access tokens for CI/CD and automation. Tokens can be limited to specific projects, environments, and actions. Set expiration dates for additional security.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag new">New</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">December 2, 2025</span>
+                <h3>Bulk Import/Export</h3>
+                <p>Import secrets from .env files, JSON, or CSV. Export in the same formats. Makes migration from other tools (or no tools) much easier.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag new">New</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">November 20, 2025</span>
+                <h3>Dashboard Redesign</h3>
+                <p>Fresh new look for the dashboard with improved navigation, better secret organization, and faster load times. Dark mode is now the default (finally).</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag improved">Improved</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">November 12, 2025</span>
+                <h3>Secret References</h3>
+                <p>Reference one secret from another using <code>${SECRET_NAME}</code> syntax. Great for building connection strings that combine host, port, and credentials.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag new">New</span>
+                </div>
+            </article>
+            
+            <article class="changelog-entry">
+                <span class="changelog-date">November 5, 2025</span>
+                <h3>Okta SSO Support</h3>
+                <p>Added Okta as a SAML identity provider option. Team plan and above. Also fixed an issue with Azure AD group syncing.</p>
+                <div class="changelog-tags">
+                    <span class="changelog-tag new">New</span>
+                    <span class="changelog-tag fixed">Fixed</span>
+                </div>
+            </article>
+        </section>
+
+        <section class="final-cta">
+            <h2>Want to try these features?</h2>
+            <p>Start free. No credit card required.</p>
+            <a href="login.html" class="btn-primary btn-lg">Get started</a>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="index.html" class="wordmark">vault</a>
+                <p>Secrets infrastructure for<br>modern engineering teams.</p>
+            </div>
+            <nav class="footer-nav">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="integrations.html">Integrations</a>
+                    <a href="changelog.html">Changelog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="docs.html">Documentation</a>
+                    <a href="api.html">API Reference</a>
+                    <a href="status.html">Status</a>
+                    <a href="security.html">Security</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="careers.html">Careers</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Vault Technologies, Inc.</span>
+            <div class="legal">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

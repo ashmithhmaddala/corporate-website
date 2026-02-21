@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found · Vault</title>
+    <meta name="description" content="The page you're looking for doesn't exist.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .error-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-code {
+            font-size: clamp(6rem, 20vw, 12rem);
+            font-weight: 600;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            background: linear-gradient(180deg, var(--text) 0%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        
+        .error-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 400px;
+            margin-bottom: 2rem;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .error-links {
+            margin-top: 4rem;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .error-links a {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            transition: color 0.15s;
+        }
+        
+        .error-links a:hover {
+            color: var(--text);
+        }
+        
+        .error-illustration {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 2rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <main class="error-page">
+        <svg class="error-illustration" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4"/>
+            <circle cx="12" cy="16" r="0.5" fill="currentColor"/>
+        </svg>
+        
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page not found</h1>
+        <p class="error-description">The page you're looking for doesn't exist or has been moved. Let's get you back on track.</p>
+        
+        <div class="error-actions">
+            <a href="index.html" class="btn-primary">Back to home</a>
+            <a href="docs.html" class="btn-secondary">View documentation</a>
+        </div>
+        
+        <nav class="error-links">
+            <a href="features.html">Features</a>
+            <a href="pricing.html">Pricing</a>
+            <a href="docs.html">Docs</a>
+            <a href="contact.html">Contact</a>
+            <a href="status.html">Status</a>
+        </nav>
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>

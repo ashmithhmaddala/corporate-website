@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation · Vault</title>
+    <meta name="description" content="Learn how to use Vault. Guides, tutorials, and reference documentation.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23000' width='100' height='100' rx='20'/></svg>">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="pages.css">
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <header class="header">
+        <nav class="nav">
+            <a href="index.html" class="wordmark">vault</a>
+            <div class="nav-center" id="nav-menu">
+                <a href="features.html">Features</a>
+                <a href="pricing.html">Pricing</a>
+                <a href="integrations.html">Integrations</a>
+                <a href="docs.html" class="active">Docs</a>
+            </div>
+            <div class="nav-end">
+                <button class="theme-toggle" aria-label="Toggle dark/light mode" title="Toggle theme">
+                    <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+                <a href="login.html" class="nav-signin">Sign in</a>
+                <a href="login.html" class="btn-nav">Get started</a>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="docs-nav-section">
+                <h4>Getting Started</h4>
+                <a href="#" class="active">Introduction</a>
+                <a href="#">Quick Start</a>
+                <a href="#">Core Concepts</a>
+                <a href="#">CLI Installation</a>
+            </div>
+            <div class="docs-nav-section">
+                <h4>Projects</h4>
+                <a href="#">Creating Projects</a>
+                <a href="#">Environments</a>
+                <a href="#">Secrets</a>
+                <a href="#">Variables</a>
+            </div>
+            <div class="docs-nav-section">
+                <h4>Team</h4>
+                <a href="#">Inviting Members</a>
+                <a href="#">Roles & Permissions</a>
+                <a href="#">SSO Setup</a>
+            </div>
+            <div class="docs-nav-section">
+                <h4>Integrations</h4>
+                <a href="#">Vercel</a>
+                <a href="#">GitHub Actions</a>
+                <a href="#">AWS</a>
+                <a href="#">Kubernetes</a>
+            </div>
+            <div class="docs-nav-section">
+                <h4>CLI</h4>
+                <a href="#">Commands</a>
+                <a href="#">Configuration</a>
+                <a href="#">CI/CD Usage</a>
+            </div>
+        </aside>
+        
+        <article class="docs-content">
+            <h1>Introduction</h1>
+            <p>Vault is secrets infrastructure for modern engineering teams. It provides a secure, centralized place to store and manage all your application secrets—API keys, database credentials, certificates, and more.</p>
+            
+            <h2>Why Vault?</h2>
+            <p>Managing secrets is hard. Teams typically start by sharing credentials over Slack, then graduate to a shared password manager, then maybe to environment files checked into git (bad idea). Each approach has problems:</p>
+            
+            <ul>
+                <li><strong>Slack/Email:</strong> No access control, no audit trail, credentials sit in chat history forever</li>
+                <li><strong>Password managers:</strong> Not designed for programmatic access, no environment separation</li>
+                <li><strong>.env files in git:</strong> Credentials exposed to anyone with repo access, impossible to rotate</li>
+                <li><strong>Platform-specific solutions:</strong> Lock-in, different interfaces for each platform</li>
+            </ul>
+            
+            <p>Vault solves these problems by giving you one place to manage secrets, with proper access controls, audit logging, and integrations that sync secrets to wherever they need to go.</p>
+            
+            <h2>Core Concepts</h2>
+            
+            <h3>Projects</h3>
+            <p>A project represents an application or service. Each project has its own set of secrets, environments, and team members. You might have one project for your API, another for your web app, and another for your mobile app.</p>
+            
+            <h3>Environments</h3>
+            <p>Environments represent deployment targets like development, staging, and production. Each environment has its own copy of secrets with potentially different values. A developer can have access to development secrets without being able to see production credentials.</p>
+            
+            <h3>Secrets</h3>
+            <p>Secrets are key-value pairs like <code>DATABASE_URL</code> or <code>STRIPE_SECRET_KEY</code>. Each secret exists in every environment but can have different values. Secrets are encrypted at rest and in transit.</p>
+            
+            <h2>Quick Start</h2>
+            
+            <p>The fastest way to get started is with our CLI:</p>
+            
+            <pre><code># Install the CLI
+npm install -g @vault/cli
+
+# Login to your account
+vault login
+
+# Create a new project
+vault init my-project
+
+# Add a secret
+vault set DATABASE_URL "postgres://..."
+
+# Run your app with secrets injected
+vault run -- npm start</code></pre>
+            
+            <p>That's it! Your secrets are now managed by Vault. No more .env files, no more copy-pasting credentials.</p>
+            
+            <h2>Next Steps</h2>
+            
+            <ul>
+                <li><a href="#">Quick Start Guide</a> – Set up your first project in 5 minutes</li>
+                <li><a href="#">CLI Reference</a> – Full documentation for all CLI commands</li>
+                <li><a href="api.html">API Reference</a> – Build custom integrations with our REST API</li>
+                <li><a href="integrations.html">Integrations</a> – Connect Vault to your deployment platform</li>
+            </ul>
+            
+            <h2>Getting Help</h2>
+            
+            <p>If you run into issues or have questions:</p>
+            
+            <ul>
+                <li>Check our <a href="#">FAQ</a> for common questions</li>
+                <li>Join our <a href="#">Discord community</a> for real-time help</li>
+                <li>Email <a href="mailto:support@vault.dev">support@vault.dev</a> for direct support</li>
+                <li>Open an issue on <a href="#">GitHub</a> for bugs or feature requests</li>
+            </ul>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand">
+                <a href="index.html" class="wordmark">vault</a>
+                <p>Secrets infrastructure for<br>modern engineering teams.</p>
+            </div>
+            <nav class="footer-nav">
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="features.html">Features</a>
+                    <a href="pricing.html">Pricing</a>
+                    <a href="integrations.html">Integrations</a>
+                    <a href="changelog.html">Changelog</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="docs.html">Documentation</a>
+                    <a href="api.html">API Reference</a>
+                    <a href="status.html">Status</a>
+                    <a href="security.html">Security</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="about.html">About</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="careers.html">Careers</a>
+                    <a href="contact.html">Contact</a>
+                </div>
+            </nav>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Vault Technologies, Inc.</span>
+            <div class="legal">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
