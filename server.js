@@ -13,6 +13,14 @@ const url = require('url');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use((req, res, next) => {
+    res.setHeader('X-System-Admin-Flag', 'FLAG{H3AD3R_D3T3CT1V3_2026}');
+    next();
+});
+
+
+
+
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
