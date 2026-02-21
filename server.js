@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const CryptoJS = require('crypto-js');
 const path = require('path');
 const fs = require('fs');
@@ -58,6 +59,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text({ type: 'text/xml' }));
 app.use(bodyParser.raw({ type: 'application/xml' }));
+app.use(cookieParser()); // VULN: Cookie parser for session cookie challenge
 app.use(express.static(path.join(__dirname)));
 app.use('/uploads', express.static(uploadsDir));
 
@@ -110,6 +112,45 @@ users.set('jane@acme.com', {
     bio: 'DevOps Engineer at Acme Corp',
     phone: '+1 (555) 000-0003',
     location: 'Austin, TX',
+    profilePicture: null,
+    createdAt: new Date()
+});
+// VULN: Guest account for cookie manipulation challenge
+users.set('guest@vault.dev', {
+    id: 'user_guest',
+    email: 'guest@vault.dev',
+    password: 'guest123',
+    name: 'Guest User',
+    role: 'guest',
+    bio: 'Guest account for testing',
+    phone: '',
+    location: '',
+    profilePicture: null,
+    createdAt: new Date()
+});
+// VULN: Allow guest login with username only (no domain)
+users.set('guest', {
+    id: 'user_guest',
+    email: 'guest@vault.dev',
+    password: 'guest123',
+    name: 'Guest User',
+    role: 'guest',
+    bio: 'Guest account for testing',
+    phone: '',
+    location: '',
+    profilePicture: null,
+    createdAt: new Date()
+});
+// VULN: Admin account accessible via cookie manipulation
+users.set('admin', {
+    id: 'user_admin_cookie',
+    email: 'admin@vault.dev',
+    password: 'admin',
+    name: 'Cookie Admin',
+    role: 'admin',
+    bio: 'Administrator accessed via cookie',
+    phone: '+1 (555) 999-9999',
+    location: 'Secure Location',
     profilePicture: null,
     createdAt: new Date()
 });
@@ -186,7 +227,8 @@ const FLAGS = {
     FLAG_JWT_BYPASS: 'CTF{w34k_4uth_byp4ss}',
     FLAG_MASS_ASSIGNMENT: 'CTF{m4ss_4ss1gnm3nt_r0l3}',
     FLAG_CORS_MISCCONFIG: 'CTF{c0rs_w1ld_c4rd_4cc3ss}',
-    FLAG_INFO_DISCLOSURE: 'CTF{1nf0_d1scl0sur3_st4ck_tr4c3}'
+    FLAG_INFO_DISCLOSURE: 'CTF{1nf0_d1scl0sur3_st4ck_tr4c3}',
+    FLAG_SESSION_COOKIE: 'CTF{b4s3_64_s3ss10n_f0rg3ry}'
 };
 
 // ============================================
@@ -241,6 +283,44 @@ function authenticate(req, res, next) {
     req.user = session.user;
     req.token = token;
     next();
+}
+
+// VULN: Cookie-based authentication (insecure base64 encoding)
+function cookieAuth(req, res, next) {
+    const sessionCookie = req.cookies.session;
+    
+    if (!sessionCookie) {
+        return res.status(401).json({ success: false, error: 'No session cookie', hint: 'Try logging in first' });
+    }
+    
+    try {
+        // VULN: Decode base64 session cookie (username:password)
+        const decoded = Buffer.from(sessionCookie, 'base64').toString('utf-8');
+        const [username, password] = decoded.split(':');
+        
+        if (!username || !password) {
+            return res.status(401).json({ success: false, error: 'Invalid session format' });
+        }
+        
+        // Check if user exists
+        const user = users.get(username);
+        
+        if (!user) {
+            return res.status(401).json({ success: false, error: 'Invalid session' });
+        }
+        
+        // VULN: Check password from cookie (very insecure!)
+        if (user.password !== password) {
+            return res.status(401).json({ success: false, error: 'Invalid credentials in session' });
+        }
+        
+        req.user = { id: user.id, name: user.name, email: user.email, role: user.role };
+        req.cookieUsername = username;
+        next();
+        
+    } catch (error) {
+        return res.status(401).json({ success: false, error: 'Failed to decode session cookie' });
+    }
 }
 
 // Clean up expired data
@@ -353,6 +433,14 @@ app.post('/api/auth/login', (req, res) => {
         });
 
         logAudit(user.id, 'logged in', 'session');
+
+        // VULN: Set insecure session cookie (base64 encoded username:password)
+        const sessionData = `${email}:${password}`;
+        const sessionCookie = Buffer.from(sessionData).toString('base64');
+        res.cookie('session', sessionCookie, { 
+            httpOnly: false, // VULN: Accessible via JavaScript for easy inspection
+            maxAge: 24 * 60 * 60 * 1000 // 24 hours
+        });
 
         res.json({
             success: true,
@@ -560,6 +648,65 @@ app.put('/api/profile/password', authenticate, (req, res) => {
     } catch (error) {
         console.error('Password change error:', error);
         res.status(500).json({ success: false, error: 'Failed to change password' });
+    }
+});
+
+// ============================================
+// Routes: Cookie Challenge (Session Forgery)
+// ============================================
+
+// VULN: Check session cookie and return flag for admin
+app.get('/api/flag/session', cookieAuth, (req, res) => {
+    try {
+        // Check if user is admin via cookie
+        if (req.user.role === 'admin' || req.cookieUsername === 'admin') {
+            logAudit(req.user.id, 'accessed', 'session_flag', { method: 'cookie' });
+            
+            return res.json({
+                success: true,
+                flag: FLAGS.FLAG_SESSION_COOKIE,
+                message: 'Congratulations! You\'ve successfully forged an admin session cookie.',
+                user: req.user,
+                hint: 'The session cookie was just base64(username:password). You decoded it and forged admin credentials!'
+            });
+        } else {
+            return res.json({
+                success: false,
+                message: `Logged in as ${req.user.name} (${req.user.role})`,
+                hint: 'You need admin access. Inspect your session cookie in DevTools...',
+                role: req.user.role
+            });
+        }
+    } catch (error) {
+        console.error('Session flag error:', error);
+        res.status(500).json({ success: false, error: 'Failed to check session' });
+    }
+});
+
+// Alternative endpoint - profile-based flag access
+app.get('/api/profile/flag', cookieAuth, (req, res) => {
+    try {
+        const response = {
+            success: true,
+            user: req.user,
+            sessionData: {
+                username: req.cookieUsername,
+                role: req.user.role
+            }
+        };
+        
+        if (req.user.role === 'admin' || req.cookieUsername === 'admin') {
+            response.flag = FLAGS.FLAG_SESSION_COOKIE;
+            response.message = '🎉 FLAG CAPTURED! You successfully exploited the insecure session cookie!';
+        } else {
+            response.message = 'Access your profile data here';
+            response.hint = 'Admins might see something special here... Check the session cookie 🍪';
+        }
+        
+        res.json(response);
+    } catch (error) {
+        console.error('Profile flag error:', error);
+        res.status(500).json({ success: false, error: 'Failed to access profile' });
     }
 });
 

@@ -25,6 +25,7 @@
 | 21 | SQL Injection - Login Bypass | POST /challenge1 | app.py — Authentication bypass via SQL comment injection | FLAG{sql_login_bypass_success}
 | 22 | SQL Injection - UNION Attack | GET /challenge2?search= | app.py — Data exfiltration from hidden tables using UNION SELECT | FLAG{union_injection_master}
 | 23 | SQL Injection - Blind Boolean | GET /challenge3?id= | app.py — Extract data character-by-character via boolean conditions | FLAG{blind_sqli_champion}
+| 24 | Insecure Session Cookie (Base64) | `GET /api/profile/flag`, `/api/flag/session` | `server.js` L665 — Session cookie is base64(username:password), forgeable to admin | `CTF{b4s3_64_s3ss10n_f0rg3ry}`
 
 ---
 

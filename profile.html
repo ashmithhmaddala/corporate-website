@@ -231,6 +231,28 @@
                             </form>
                         </div>
                     </div>
+
+                    <!-- CTF Challenge: Session Cookie -->
+                    <div class="profile-card" style="border: 1px solid #333;">
+                        <div class="profile-card-header">
+                            <h2>🎯 Security Challenge</h2>
+                            <span style="font-size: 0.75rem; color: #666;">CTF Module</span>
+                        </div>
+                        <div class="profile-card-body">
+                            <p style="color: #888; font-size: 0.9rem; margin-bottom: 1rem;">
+                                Test your security skills by inspecting session mechanisms.
+                            </p>
+                            <button type="button" id="checkFlagBtn" class="btn-primary" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                Check for Flag 🚩
+                            </button>
+                            <div id="flagResult" style="margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none;">
+                                <!-- Flag result will be displayed here -->
+                            </div>
+                            <div style="margin-top: 1rem; padding: 0.75rem; background: #0a0a0a; border: 1px solid #222; border-radius: 6px; font-size: 0.8rem; color: #666;">
+                                💡 <strong style="color: #888;">Hint:</strong> Try inspecting your browser cookies in DevTools (Application → Cookies)
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -483,6 +505,83 @@
             localStorage.removeItem('user');
             window.location.href = 'login.html';
         }
+
+        // CTF Flag Checker - Cookie Challenge
+        document.getElementById('checkFlagBtn')?.addEventListener('click', async () => {
+            const btn = document.getElementById('checkFlagBtn');
+            const resultDiv = document.getElementById('flagResult');
+            
+            btn.disabled = true;
+            btn.textContent = 'Checking...';
+            
+            try {
+                const response = await fetch('/api/profile/flag', {
+                    method: 'GET',
+                    credentials: 'include' // Important: include cookies
+                });
+                
+                const data = await response.json();
+                resultDiv.style.display = 'block';
+                
+                if (data.flag) {
+                    // Success - show flag
+                    resultDiv.style.background = 'linear-gradient(135deg, #1a5f1a 0%, #0d2f0d 100%)';
+                    resultDiv.style.border = '2px solid #4ade80';
+                    resultDiv.innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎉</div>
+                            <div style="color: #4ade80; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.5rem;">
+                                ${data.message}
+                            </div>
+                            <div style="background: #000; padding: 1rem; border-radius: 6px; font-family: monospace; color: #4ade80; font-size: 0.9rem; margin-top: 1rem; word-break: break-all;">
+                                ${data.flag}
+                            </div>
+                            ${data.hint ? `<div style="margin-top: 1rem; color: #888; font-size: 0.85rem; font-style: italic;">${data.hint}</div>` : ''}
+                            <div style="margin-top: 1rem; color: #888; font-size: 0.8rem;">
+                                Logged in as: <strong style="color: #4ade80;">${data.user.name}</strong> (${data.user.role})
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    // Not admin - show hint
+                    resultDiv.style.background = 'linear-gradient(135deg, #1a1a3e 0%, #0d0d1f 100%)';
+                    resultDiv.style.border = '2px solid #667eea';
+                    resultDiv.innerHTML = `
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔒</div>
+                            <div style="color: #ddd; font-weight: 600; margin-bottom: 0.5rem;">
+                                ${data.message}
+                            </div>
+                            <div style="background: #0a0a0a; padding: 0.75rem; border-radius: 6px; margin-top: 1rem; color: #888; font-size: 0.85rem;">
+                                Current role: <strong style="color: #667eea;">${data.sessionData.role}</strong>
+                            </div>
+                            ${data.hint ? `
+                                <div style="margin-top: 1rem; padding: 0.75rem; background: #1a0a0a; border: 1px solid #333; border-radius: 6px; text-align: left;">
+                                    <div style="color: #f0c040; font-size: 0.85rem; margin-bottom: 0.25rem;">💡 Hint:</div>
+                                    <div style="color: #888; font-size: 0.8rem;">${data.hint}</div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Error checking flag:', error);
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#1a0a0a';
+                resultDiv.style.border = '2px solid #ef4444';
+                resultDiv.innerHTML = `
+                    <div style="color: #ef4444; text-align: center;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">❌</div>
+                        <div>Error: ${error.message}</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #888;">Make sure you're logged in</div>
+                    </div>
+                `;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Check for Flag 🚩';
+            }
+        });
     </script>
 </body>
 </html>
